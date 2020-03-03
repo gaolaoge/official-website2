@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>盛世影云官网</title>
+    <style>
+      body {
+        padding: 0px!important;
+      }
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+      #fp-nav {
+        position: fixed;
+        right: 34px;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0px!important;
+      }
+      #fp-nav ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 20px;
+      }
+      #fp-nav li {
+        list-style: none;
+        /*flex-basis: calc(100% / 6);*/
+        height: 30px;
+        display: flex;
+        align-items: center;
+      }
+      #fp-nav li a {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: rgba(247,237,92,1);
+        display: block;
+        font-size: 0px;
+        transition: all 0.2s;
+      }
+      #fp-nav li a:hover,
+      #fp-nav li a.active {
+        width: 10px;
+        height: 10px;
+        margin: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

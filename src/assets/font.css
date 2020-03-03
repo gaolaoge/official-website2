@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "u";
+  src: url('UniSansHeavy.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TypelaboNStd";
+  src: url('A-OTF-TypelaboNStd-Regular.otf');
+  font-weight: normal;
+  font-style: normal;
+}

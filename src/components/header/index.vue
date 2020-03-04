@@ -85,15 +85,15 @@
           },
           {
             text: '影视协会',
-            url: '/'
+            url: '/filmAndTelevisionAssociation'
           },
           {
             text: '行业资讯',
-            url: '/'
+            url: '/industryInformation'
           },
           {
             text: '关于我们',
-            url: '/'
+            url: '/companyProfile'
           },
         ]
       }
@@ -111,6 +111,14 @@
             case 'movieCloudBase':
               this.activeNum = 2
               break
+            case 'filmAndTelevisionAssociation':
+              this.activeNum = 3
+              break
+            case 'industryInformation':
+              this.activeNum = 4
+              break
+            case 'companyProfile':
+              this.activeNum = 5
           }
         },
         deep: true,

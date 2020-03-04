@@ -19,6 +19,21 @@ export default new Router({
       path: '/movieCloudBase',
       name: 'movieCloudBase',
       component: () => import('@/components/movieCloudBase')
+    },
+    {
+      path: '/filmAndTelevisionAssociation',
+      name: 'filmAndTelevisionAssociation',
+      component: () => import('@/components/filmAndTelevisionAssociation')
+    },
+    {
+      path: '/companyProfile',
+      name: 'companyProfile',
+      component: () => import('@/components/companyProfile')
+    },
+    {
+      path: '/industryInformation',
+      name: 'industryInformation',
+      component: () => import('@/components/industryInformation')
     }
   ]
 })

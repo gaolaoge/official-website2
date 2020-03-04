@@ -2,10 +2,10 @@
   <div class="wrapper">
     <full-page :options="options">
       <div class="section">
-        {{ pageNum }}
       </div>
       <div class="section active">
         <div class="sectionBase" :style="{backgroundImage: 'url(' + bgi + ')'}">
+
           <div class="joinUs">
             <div class="btn">
               {{ btn }}
@@ -238,15 +238,13 @@
     },
     computed: {
       bgi(){
-        return this.navActive == 2 ? require('@/assets/bg_us.png') : ''
-      },
-      help(){
         if(this.navActive == 2 && this.pageNum == 1){
           this.$store.commit('changeInTheEnd', true)
         }else{
           this.$store.commit('changeInTheEnd', false)
         }
-        return this.navActive + this.pageNum
+
+        return this.navActive == 2 ? require('@/assets/bg_us.png') : ''
       }
     },
     mounted() {

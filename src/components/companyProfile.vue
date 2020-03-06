@@ -1,9 +1,12 @@
 <template>
   <div class="wrapper">
     <full-page :options="options">
-      <div class="section">
-      </div>
       <div class="section active">
+        <div class="sectionBase">
+          <carouselMoudle />
+        </div>
+      </div>
+      <div class="section">
         <div class="sectionBase" :style="{backgroundImage: 'url(' + bgi + ')'}">
 
           <div class="joinUs">
@@ -130,6 +133,7 @@
 
 <script>
   import footerM from '@/components/footer/index'
+  import carouselMoudle from '@/components/carousel'
   export default {
     name: 'companyProfile',
     data(){
@@ -148,7 +152,7 @@
           ],
           animateAnchor: true,
           sectionsColor: [
-            "tomato",
+            "#fff",
             "#fff"
           ]
         },
@@ -229,7 +233,8 @@
       }
     },
     components: {
-      footerM
+      footerM,
+      carouselMoudle
     },
     methods: {
       afterLoad(anchorLink,index){

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <header>
-      <div class="logo">
+      <div class="logo" @click="$router.push('/')">
         <img src="@/icons/logo-black.png" alt="SENSE" title="SENSE" v-show="!inTheEnd">
         <img src="@/icons/logo-white.png" alt="SENSE" title="SENSE" v-show="inTheEnd">
       </div>
@@ -26,7 +26,7 @@
                 <li v-for="(item,index) in navRouterList"
                     :key="index"
                     :class="[{'active': index == activeNum}]"
-                    @click="$router.push(item.url)">
+                    @click="jump(item.url)">
                     {{ item.text }}
                 </li>
               </ul>
@@ -145,7 +145,10 @@
       }
     },
     methods: {
-
+      jump(route){
+        this.$router.push(route)
+        this.btnIconActive = !this.btnIconActive
+      }
     }
   }
 </script>

@@ -34,6 +34,11 @@ export default new Router({
       path: '/industryInformation',
       name: 'industryInformation',
       component: () => import('@/components/industryInformation')
+    },
+    {
+      path: 'three',
+      name: 'three',
+      component: () => import('@/components/three')
     }
   ]
 })

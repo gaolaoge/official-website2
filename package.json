@@ -13,7 +13,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "gsap": "^3.2.2",
+    "gsap": "^3.2.4",
+    "three": "^0.114.0",
+    "three-css2drender": "^1.0.0",
+    "three-orbit-controls": "^82.1.0",
     "vue": "^2.5.2",
     "vue-fullpage.js": "^0.1.5",
     "vue-router": "^3.0.1",

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <headerM class="header_" :u="u"/>
-    <!--<mouseIcon />-->
+    <mouseIcon />
     <router-view @getFooterInfo="getFooterInfo"
                  @getEndSection="getEndSection"></router-view>
   </div>

@@ -1,10 +1,12 @@
 <template>
   <div class="wrapper">
     <full-page :options="options">
-      <div class="section">
-
-      </div>
       <div class="section active">
+        <div class="sectionBase">
+          <videoMoudle />
+        </div>
+      </div>
+      <div class="section">
         <div class="sectionBase">
           <div class="joinUs">
             <div class="btn">
@@ -86,6 +88,7 @@
 </template>
 
 <script>
+  import videoMoudle from '@/components/videoSection'
   import footerM from '@/components/footer/index'
   export default {
     name: 'filmAndTelevisionAssociation',
@@ -104,7 +107,7 @@
           ],
           animateAnchor: true,
           sectionsColor: [
-            "tomato",
+            "#fff",
             "#fff"
           ]
         },
@@ -161,7 +164,8 @@
       }
     },
     components: {
-      footerM
+      footerM,
+      videoMoudle
     },
     methods: {
 

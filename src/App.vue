@@ -4,13 +4,16 @@
     <mouseIcon />
     <router-view @getFooterInfo="getFooterInfo"
                  @getEndSection="getEndSection"></router-view>
+    <joinUs class="joinUs" v-show="joinUsM"/>
   </div>
 </template>
 
 <script>
   import headerM from '@/components/header/index'
   import mouseIcon from '@/components/mouseIcon'
+  import joinUs from '@/components/joinUs'
   import '@/assets/font.css'
+  import { mapState } from 'vuex'
 export default {
   name: 'App',
   data(){
@@ -21,7 +24,8 @@ export default {
   },
   components: {
     headerM,
-    mouseIcon
+    mouseIcon,
+    joinUs
   },
   methods: {
     getFooterInfo(e){
@@ -32,6 +36,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['joinUsM']),
     u(){
       return this.footerInfo && this.endSection
     }
@@ -47,6 +52,10 @@ export default {
     z-index: 1;
     top: 0px;
   }
+  /*.joinUs {*/
+    /*position: absolute;*/
+    /*top: 0px;*/
+  /*}*/
 
 }
 </style>

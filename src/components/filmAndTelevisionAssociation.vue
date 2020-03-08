@@ -8,7 +8,7 @@
       </div>
       <div class="section">
         <div class="sectionBase">
-          <div class="joinUs">
+          <div class="joinUs" @click="$store.commit('changeJoinUsM',true)">
             <div class="btn">
               {{ btn }}
             </div>
@@ -184,12 +184,11 @@
         align-items: center;
         height: 100vh;
         .joinUs {
-          display: none;
-          position: relative;
-          z-index: 999;
-          top: 30px;
-          /*display: flex;*/
+          position: absolute;
+          top: 100px;
+          display: flex;
           justify-content: center;
+          cursor: pointer;
           .btn {
             width:177px;
             height:57px;

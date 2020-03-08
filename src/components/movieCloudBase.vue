@@ -8,7 +8,7 @@
       </div>
       <div class="section">
         <div class="sectionBase">
-          <div class="joinUs">
+          <div class="joinUs" @click="$store.commit('changeJoinUsM',true)">
             <div class="btn">
               {{ btn }}
             </div>
@@ -174,7 +174,6 @@
             "#fff"
           ]
         },
-        btn: '加入我们！',
         navList: [
           {
             name: '目标及定位'
@@ -297,7 +296,8 @@
             ],
             imgUrl: require('@/assets/pic_.png')
           }
-        }
+        },
+        btn: '加入我们！'
       }
     },
     components: {
@@ -321,12 +321,11 @@
         align-items: center;
         height: 100vh;
         .joinUs {
-          display: none;
-          position: relative;
-          z-index: 999;
-          top: 30px;
-          /*display: flex;*/
+          position: absolute;
+          top: 100px;
+          display: flex;
           justify-content: center;
+          cursor: pointer;
           .btn {
             width:177px;
             height:57px;

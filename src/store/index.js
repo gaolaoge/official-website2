@@ -6,11 +6,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
-    inTheEnd: false
+    inTheEnd: false,
+    joinUsM: false
   },
   mutations: {
     changeInTheEnd(state,boolean_){
       state.inTheEnd = boolean_
+    },
+    changeJoinUsM(state,boolean_){
+      state.joinUsM = boolean_
     }
   }
 })

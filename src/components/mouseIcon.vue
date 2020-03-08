@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  // import * from 'gsap'
   export default {
     name: 'mouseIcon',
     data(){
@@ -20,8 +19,7 @@
     },
     mounted() {
       const canvas = document.querySelector('.js-canvas'),
-            ctx = canvas.getContext('2d'),
-            elems = [...document.querySelectorAll('[data-hover]')]
+            ctx = canvas.getContext('2d')
       let width = canvas.width = window.innerWidth * 6,
           height = canvas.height = window.innerHeight * 2,
           mouseX = width / 2,
@@ -67,14 +65,6 @@
           paused: true
         })
 
-        elems.forEach((el) => {
-          el.addEventListener('mouseenter', () => {
-            tween.play()
-          }, false)
-          el.addEventListener('mouseleave', () => {
-            tween.reverse()
-          }, false)
-        })
       }
 
       function lerp(a, b, n) {

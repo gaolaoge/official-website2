@@ -124,10 +124,6 @@
         deep: true,
         immediate: true
       },
-      // u(val){
-      //   if(val)
-      //     this.$store.commit('changeInTheEnd',false)
-      // }
     },
     props: {
       u: {
@@ -162,7 +158,7 @@
       position: relative;
       margin: 0px auto;
       padding: 30px 0px;
-      width: 1720px;
+      width: 94vw;
       height: 100%;
       box-sizing: border-box;
       .logo {
@@ -310,6 +306,7 @@
         letter-spacing: 4px;
         color: rgba(51,51,51,1);
         writing-mode: vertical-rl;
+        text-shadow: 0px 0px 2px rgba(256,256,256,0.9);
       }
       &:hover {
         .line {

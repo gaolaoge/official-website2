@@ -12,7 +12,19 @@
         <div class="sectionBase">
           <div class="c">
             <div class="picBase">
-              <img src="@/assets/n.png" alt="">
+              <!--<img src="@/assets/n.png" alt="" class="as">-->
+              <div class="as">
+                <img src="@/assets/personR.png" alt="" class="pers">
+                <img src="@/assets/hairR.png" alt="" class="hair">
+                <div class="text">
+                  <h6 class="zh">
+                    {{ cloud.tit.zh }}
+                  </h6>
+                  <h6 class="en">
+                    {{ cloud.tit.en }}
+                  </h6>
+                </div>
+              </div>
               <img src="@/icons/'.png" alt="" class="o">
               <img src="@/icons/right_.png" alt="" class="right_">
               <div class="textBord">
@@ -160,7 +172,7 @@
                   <p class="date">
                     {{ item.date }}
                   </p>
-                  <div class="btn">
+                  <div class="btn" @click="$store.commit('changeArticleM',true)">
                     <img src="@/icons/+.png" alt="" class="addIcon">
                     <div ref="btnn">
                       {{ item.btnT }}
@@ -300,9 +312,14 @@
         scrollingSpeed: 500,
         recordHistory: false,
         menu: '#menu',
-        // navigation: true,
-        // navigationPosition: 'right',
-        anchors: ["1","2","3","4","5","6"],
+        anchors: [
+          "homeM",
+          "movieCloudM",
+          "moviebaseM",
+          "joinusM",
+          "newM",
+          "friendlyM"
+        ],
         animateAnchor: true,
         sectionsColor: [
           "#fff",
@@ -375,7 +392,11 @@
             ]
           }
         ],
-        cloudStatus: 'systems'
+        cloudStatus: 'systems',
+        tit: {
+          zh: '中国电影云平台',
+          en: 'CHINA MOVIE CLOUD'
+        }
       },
       base: {
         tit: '中国电影云基地',
@@ -537,18 +558,17 @@
   },
   methods: {
       onLeave(anchorLink,index){
-        console.log(anchorLink,index)
-        if(index.anchor != 6){
+        if(index.anchor != 'friendlyM'){
           this.$store.commit('changeInTheEnd',false)
           this.endSection = false
           this.$emit('getEndSection',false)
         }
-        if(index.anchor == 6){
+        if(index.anchor == 'friendlyM'){
           if(this.firstBrowsing.sixPage){
             this.firstBrowsing.sixPage = false
             new common(this.$refs['btnnn'])
           }
-        }else if(index.anchor == 5){
+        }else if(index.anchor == 'newM'){
           if(this.firstBrowsing.fivePage){
             this.firstBrowsing.fivePage = false
             this.$refs['btnn'].forEach(curr => {
@@ -558,17 +578,13 @@
         }
       },
       afterLoad(anchorLink,index){
-        if(index.anchor == 6) {
+        if(index.anchor == 'friendlyM') {
           this.$store.commit('changeInTheEnd', true)
           this.endSection = true
           this.$emit('getEndSection',true)
-
-        }else if(index.anchor == 5){
-
-        }else if(index.anchor == 1){
-
         }
       },
+
       // 第二屏 云平台文本轮播
       cloudSwitch(name){
         if(name){
@@ -768,6 +784,48 @@
             background:rgba(255,255,255,1);
             box-shadow:0px 2px 40px 0px rgba(0,0,0,0.15);
             border-radius:5px;
+            .as {
+              position: relative;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 710px;
+              height: 600px;
+              overflow: hidden;
+              background-image: linear-gradient(to left, RGBA(255, 124, 128, 1),RGBA(252, 246, 103, 1));
+              .hair {
+                position: absolute;
+                top: 40px;
+                left: 0px;
+                width: 400px;
+              }
+              .pers {
+                position: absolute;
+                bottom: 40px;
+                right: 0px;
+                width: 400px;
+                z-index: 1;
+              }
+              .text {
+                position: relative;
+                z-index: 2;
+                background-color: RGBA(248, 237, 92, 1);
+                width: 310px;
+                height: 100px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .zh {
+                  font-size: 22px;
+                  font-weight: bold;
+                }
+                .en {
+                  font-size: 22px;
+                  font-weight: 900;
+                }
+              }
+            }
             .o {
               position: absolute;
               top: 130px;
@@ -1527,4 +1585,16 @@
     justify-content: center;
   }
 
+  @media screen and (max-width: 1460px){
+    .sectionBase {
+      .c {
+        width: 94vw;
+        .picBase {
+          .as {
+            width: 50%;
+          }
+        }
+      }
+    }
+  }
 </style>

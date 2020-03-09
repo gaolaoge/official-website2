@@ -28,7 +28,7 @@
                   <div class="img">
                     <img :src="item.imgUrl" alt="" class="liImg">
                     <div class="occlude">
-                      <img src="@/icons/joinIn-icon.png" alt="" class="joinInImg">
+                      <img src="@/icons/joinIn-icon.png" alt="" class="joinInImg"  @click="$store.commit('changeArticleM',true)">
                     </div>
                   </div>
                   <h6>

@@ -58,24 +58,55 @@
                   <h6 class="miniTit">
                     {{ page.pageTwo.miniTit }}
                   </h6>
-                  <img :src="page.pageTwo.imgUrl" alt="" class="img">
+                  <!--头像-->
+                  <img :src="item.imgUrl"
+                       alt=""
+                       class="img"
+                       :key="index"
+                       v-for="item,index in page.pageTwo.users"
+                       v-show="++index == page.pageTwo.index_">
                 </div>
                 <div class="right">
                   <h6 class="label">
                     {{ page.pageTwo.label }}
                   </h6>
-                  <h5 class="information">
+                  <!--简介-->
+                  <h5 class="information"
+                      :key="index"
+                      v-for="item,index in page.pageTwo.users"
+                      v-show="++index == page.pageTwo.index_">
                     <span class="name">
-                      {{ page.pageTwo.name }}
+                      {{ item.name }}
                     </span>
                     <span class="tit">
-                      {{ page.pageTwo.tit }}
+                      {{ item.tit }}
                     </span>
                   </h5>
-                  <div class="con">
-                    {{ page.pageTwo.con }}
+                  <div class="con"
+                       :key="index"
+                       v-for="item,index in page.pageTwo.users"
+                       v-show="++index == page.pageTwo.index_">
+                    {{ item.con }}
                   </div>
-
+                  <div class="btnGroup">
+                    <span class="btn">
+                      <img src="@/icons/path.png"
+                           alt=""
+                           :class="[{'done': page.pageTwo.index_ == 1}]"
+                           @click="sliderItem('left')">
+                    </span>
+                    <span class="bv">
+                      {{ page.pageTwo.index_ }}
+                      /
+                      {{ page.pageTwo.users.length }}
+                    </span>
+                    <span class="btn">
+                      <img src="@/icons/path.png"
+                           alt=""
+                           :class="[{'done': page.pageTwo.index_ == page.pageTwo.users.length}]"
+                           @click="sliderItem('right')">
+                    </span>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -147,11 +178,13 @@
           pageTwo: {
             largeTit: 'Core member',
             miniTit: '协会主要成员',
-            imgUrl: require('@/assets/w2.png'),
             label: 'Core member',
-            name: '于洁',
-            tit: '影视协会理事',
-            con: `本园区项目为政府重点招商引进项目，
+            users: [
+              {
+                imgUrl: require('@/assets/w2.png'),
+                name: '于洁',
+                tit: '影视协会理事',
+                con: `本园区项目为政府重点招商引进项目，
                   入驻企业可享受税收优惠、
                   房屋补贴、
                   人才补贴等优惠政策；
@@ -159,6 +192,22 @@
                   将大大降低企业的使用成本、
                   提高传输速度、
                   技术团队支持随时完善客户需求。`
+              },
+              {
+                imgUrl: require('@/assets/w2.png'),
+                name: '于洁2',
+                tit: '影视协会理事2',
+                con: `本园区项目为政府重点招商引进项目，
+                  入驻企业可享受税收优惠、
+                  房屋补贴、
+                  人才补贴等优惠政策；
+                  并且中国电影云平台落地商业区，
+                  将大大降低企业的使用成本、
+                  提高传输速度、
+                  技术团队支持随时完善客户需求2。`
+              }
+            ],
+            index_: 1
           }
         }
       }
@@ -168,7 +217,18 @@
       videoMoudle
     },
     methods: {
-
+      sliderItem(dire){
+        switch(dire){
+          case 'left':
+            if(this.page.pageTwo.index_ == 1) return false
+            this.page.pageTwo.index_ --
+            break
+          case 'right':
+            if(this.page.pageTwo.index_ == this.page.pageTwo.users.length) return false
+            this.page.pageTwo.index_ ++
+            break
+        }
+      }
     }
   }
 </script>
@@ -292,6 +352,9 @@
                     color:rgba(51,51,51,1);
                     line-height:32px;
                   }
+                  .btnGroup {
+
+                  }
                 }
                 .right {
                   flex-basis: 50%;
@@ -363,6 +426,29 @@
                     font-weight:400;
                     color:rgba(51,51,51,1);
                     line-height:32px;
+                  }
+                  .btnGroup {
+                    margin-top: 77px;
+                    text-align: right;
+                    .btn {
+                      img {
+                        width: 30px;
+                        cursor: pointer;
+                        &.done {
+                          opacity: 0.6;
+                          cursor: initial;
+                        }
+                      }
+                      &:nth-of-type(1){
+                        img {
+                          transform: rotate(180deg);
+                        }
+                      }
+                    }
+                    .bv {
+                      vertical-align: super;
+                      padding: 0px 6px;
+                    }
                   }
                 }
               }

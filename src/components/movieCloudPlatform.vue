@@ -35,7 +35,7 @@
               <div class="btn_"></div>
               <div class="btnM"></div>
               <div class="btnT">
-                <img src="@/icons/svg/p.svg" alt="" class="p playIcon">
+                <img src="@/icons/enter.png" alt="" class="p playIcon">
                 {{ info.btnText }}
               </div>
             </div>
@@ -98,14 +98,27 @@
                     {{ itemTwo.cont }}
                   </div>
                   <div class="switchItem">
-                    <img src="@/icons/btnOrange.png" alt="">
-                    <span>1/4</span>
-                    <img src="@/icons/btnOrange.png" alt="">
+                    <img src="@/icons/btnOrange.png" alt="" @click.stop="switchItem('left')">
+                    <span>
+                      {{ itemTwo.itemNum }}
+                      / 4
+                    </span>
+                    <img src="@/icons/btnOrange.png" alt="" @click.stop="switchItem('right')">
                   </div>
+                  <!--<div class="btn">-->
+                    <!--<img src="@/icons/play.png" alt="">-->
+                    <!--{{ itemTwo.btnText }}-->
+                  <!--</div>-->
+
                   <div class="btn">
-                    <img src="@/icons/play.png" alt="">
-                    {{ itemTwo.btnText }}
+                    <div class="btn_"></div>
+                    <div class="btnM"></div>
+                    <div class="btnT">
+                      <img src="@/icons/enter.png" alt="" class="p">
+                      {{ itemTwo.btnText }}
+                    </div>
                   </div>
+
                   <p class="new">
                     <img src="@/icons/svg/o.svg" alt="">
                     {{ itemTwo.new }}
@@ -115,6 +128,7 @@
                   <ul>
                     <li v-for="item,index in itemTwo.u"
                         :key="index"
+                        v-show="itemTwo.itemNum - 1 <= index"
                         class="r">
                       <img src="@/icons/firI.png"
                            alt=""
@@ -286,7 +300,8 @@
                      可同时兼容多个版本的系统软件，
                      支持主流三维软件。`
             },
-          ]
+          ],
+          itemNum: 1  //轮播结构索引
         }
       }
     },
@@ -300,6 +315,18 @@
       },
       afterLoad(){
 
+      },
+      switchItem(dir){
+        switch(dir){
+          case 'left':
+            if(this.itemTwo.itemNum == 1) return false
+            this.itemTwo.itemNum --
+            break
+          case 'right':
+            if(this.itemTwo.itemNum == this.itemTwo.u.length) return false
+            this.itemTwo.itemNum ++
+            break
+        }
       }
     }
   }
@@ -367,58 +394,7 @@
               line-height:42px;
             }
           }
-          .btn {
-            position: relative;
-            margin-top: 29px;
-            z-index: 2;
-            width: 171px;
-            height: 65px;
-            cursor: pointer;
-            .btn_ {
-              position: absolute;
-              top: 0px;
-              left: 0px;
-              background-color: rgba(18,18,18,1);
-              width: 171px;
-              height: 65px;
-            }
-            .btnM {
-              position: absolute;
-              top: 0px;
-              left: 0px;
-              background: rgba(247,237,92,1);
-              width: 171px;
-              height: 65px;
-              transition: all 0.3s;
-            }
-            .btnT {
-              position: absolute;
-              top: 0px;
-              left: 0px;
-              width: 171px;
-              height: 65px;
-              font-size: 18px;
-              font-weight: 600;
-              color: rgba(51,51,51,1);
-              line-height: 65px;
-              text-align: center;
-              transition: all 0.6s;
-              .p {
-                width: 14px;
-                vertical-align: middle;
-              }
-            }
-            &:hover {
-              .btnM {
-                top: 10px;
-                left: 10px;
-              }
-              .btnT {
-                top: 10px;
-                left: 10px;
-              }
-            }
-          }
+
         }
         .itemList {
           width: 100%;
@@ -730,6 +706,60 @@
       .footer_ {
         position: absolute;
         bottom: 0px;
+      }
+
+      .btn {
+        position: relative;
+        margin-top: 29px;
+        z-index: 2;
+        width: 153px;
+        height: 42px;
+        cursor: pointer;
+        .btn_ {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          background-color: RGBA(51, 51, 51, 1);
+          width: 153px;
+          height: 42px;
+        }
+        .btnM {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          background: RGBA(51, 51, 51, 1);
+          width: 153px;
+          height: 42px;
+          transition: all 0.3s;
+        }
+        .btnT {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 153px;
+          height: 42px;
+          font-size: 16px;
+          font-weight: 600;
+          color: rgba(256,256,256,1);
+          line-height: 42px;
+          text-align: center;
+          transition: all 0.6s;
+          .p {
+            /*width: 14px;*/
+            vertical-align: middle;
+          }
+        }
+        &:hover {
+          .btnM {
+            top: 10px;
+            left: 10px;
+            background-color: RGBA(255, 106, 113, 1);
+          }
+          .btnT {
+            top: 10px;
+            left: 10px;
+          }
+        }
       }
     }
   }

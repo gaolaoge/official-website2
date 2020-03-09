@@ -7,7 +7,8 @@ export default new Vuex.Store({
   strict: true,
   state: {
     inTheEnd: false,
-    joinUsM: false
+    joinUsM: false,    //录入信息模块展示
+    articleM: false    //咨询详情模块展示
   },
   mutations: {
     changeInTheEnd(state,boolean_){
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     changeJoinUsM(state,boolean_){
       state.joinUsM = boolean_
+    },
+    changeArticleM(state,boolean_){
+      state.articleM = boolean_
     }
   }
 })

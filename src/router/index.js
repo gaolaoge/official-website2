@@ -8,6 +8,7 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
+      // alias: ['/friendlyM','/moviebaseM'],
       component: () => import('@/components/helloWorld')
     },
     {
@@ -34,6 +35,31 @@ export default new Router({
       path: '/industryInformation',
       name: 'industryInformation',
       component: () => import('@/components/industryInformation')
-    }
+    },
+    //重定向
+    {
+      path: '/friendlyM',
+      redirect: '/'
+    },
+    {
+      path: '/newM',
+      redirect: '/'
+    },
+    {
+      path: '/joinusM',
+      redirect: '/'
+    },
+    {
+      path: '/moviebaseM',
+      redirect: '/'
+    },
+    {
+      path: '/movieCloudM',
+      redirect: '/'
+    },
+    {
+      path: '/homeM',
+      redirect: '/'
+    },
   ]
 })

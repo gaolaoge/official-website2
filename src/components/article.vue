@@ -64,13 +64,14 @@
       padding: 6px 6px;
       background-color: rgba(256,256,256,1);
       section {
-        /*padding: 8px;*/
         position: relative;
         height: calc(100vh - 200px);
         background-color: #fff;
         text-align: center;
         overflow-y: auto;
         overflow-x: hidden;
+        padding-bottom: 40px;
+        box-sizing: border-box;
         header {
           overflow: hidden;
           padding-top: 30px;
@@ -78,6 +79,9 @@
           font-weight:600;
           color:rgba(51,51,51,1);
           line-height:33px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         article {
           margin: 30px auto;
@@ -128,10 +132,38 @@
       bottom: 40px;
       width: 100vw;
       text-align: center;
-      /*padding-top: 20px;*/
       img {
         width: 30px;
         cursor: pointer;
+      }
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .article-wrapper {
+      .box {
+        section {
+          article {
+            width: 94vw;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .article-wrapper {
+      .box {
+        section {
+          header {
+            font-size: 20px;
+          }
+          article {
+            font-size: 14px;
+            /deep/img {
+              width: 100%;
+            }
+          }
+        }
       }
     }
   }

@@ -8,7 +8,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'fullpage.js/vendors/scrolloverflow'
 import VueFullpage from 'vue-fullpage.js'
 import store from './store'
-// import './assets/font.less'
 
 Vue.config.productionTip = false
 

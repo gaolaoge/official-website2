@@ -57,11 +57,13 @@
       <img src="@/icons/wb-white.png" alt="" class="ic" v-show="o">
       <img src="@/assets/mm.png" alt="" class="mm">
     </div>
+    <im class="im"/>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
+  import im from '@/components/im'
   export default {
     name: 'h',
     data(){
@@ -145,6 +147,9 @@
         this.$router.push(route)
         this.btnIconActive = !this.btnIconActive
       }
+    },
+    components: {
+      im
     }
   }
 </script>
@@ -152,12 +157,12 @@
 <style scoped lang="less">
   .wrapper {
     width: 100vw;
-    height: 104px;
+    height: 74px;
     font-family:PingFangSC-Semibold,PingFang SC;
     header {
       position: relative;
       margin: 0px auto;
-      padding: 30px 0px;
+      padding: 30px 0px 0px;
       width: 94vw;
       height: 100%;
       box-sizing: border-box;
@@ -277,7 +282,8 @@
               }
             }
             &.active {
-              left: calc(860px - 50vw);
+              /*left: 0px;*/
+              left: calc(0px - 3vw);
             }
           }
         }
@@ -349,6 +355,41 @@
     }
     .contact2 {
       bottom: 110px;
+    }
+    .im {
+      position: absolute;
+      top: 50vh;
+      left: 50vw;
+      transform: translate(-50%,-50%);
+
+    }
+  }
+  @media screen and (max-width: 640px) {
+    .wrapper {
+      header {
+        .navBase {
+          .navBtn {
+            .navListBase {
+              background-image: repeating-linear-gradient(90deg, rgba(256,256,256,0.8) 0%,rgba(256,256,256,0.8) 10%, rgba(41, 41, 41, 1) 10%, rgba(41, 41, 41, 1) 100%);
+              .ba {
+                width: 90vw;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 580px) {
+    .wrapper {
+      .service,
+      .telephone{
+        width: 58px;
+      }
+      .contact,
+      .contact2 {
+        right: 30px;
+      }
     }
   }
 </style>

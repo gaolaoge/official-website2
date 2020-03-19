@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     inTheEnd: false,
     joinUsM: false,    //录入信息模块展示
-    articleM: false    //咨询详情模块展示
+    articleM: false,   //咨询详情模块展示
+    videoM: false     //视频弹窗
   },
   mutations: {
     changeInTheEnd(state,boolean_){
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     changeArticleM(state,boolean_){
       state.articleM = boolean_
+    },
+    changeVideoM(state,boolean_){
+      state.videoM = boolean_
     }
   }
 })

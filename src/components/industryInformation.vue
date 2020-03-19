@@ -19,7 +19,7 @@
                        class="input"
                        v-model="inputVal"
                        placeholder="在此输入关键词，例：渲染农场">
-                <img src="@/icons/joinIn-icon.png" alt="" class="searching" v-show="inputVal">
+                <img src="@/icons/joinIn-icon.png" alt="" class="searching" v-show="inputVal" @click="searchKeyword">
               </div>
             </div>
             <div class="newsList">
@@ -42,12 +42,11 @@
             </div>
             <div class="paginationBase">
               <el-pagination
-                @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-size="8"
+                :current-page="currentPage"
+                :page-size="pageSize"
                 layout="total, prev, pager, next"
-                :total="164">
+                :total="totalNum">
               </el-pagination>
             </div>
           </div>
@@ -62,6 +61,11 @@
   import footerM from '@/components/footer/index'
   import { TweenLite,TimelineMax,Expo } from 'gsap'
   import carouselMoudle from '@/components/carousel'
+  import { computeDate } from '@/assets/common.js'
+  import {
+    getNewsList
+  } from '@/api/api.js'
+
   export default {
     name: 'industryInformation',
     data () {
@@ -129,8 +133,10 @@
             },
           ]
         },
-        currentPage4: 1,
-        inputVal: ''
+        currentPage: 1,
+        pageSize: 8,
+        inputVal: '',
+        totalNum: 10
       }
     },
     components: {
@@ -155,11 +161,37 @@
         this.footerInfo = e
         this.$emit('getFooterInfo',e)
       },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.currentPage = val
+        this.getNewsListFun({
+          name: this.inputVal,
+          size: this.pageSize,
+          page: this.currentPage,
+          hide: 1
+        })
+      },
+      getNewsListFun(data){
+        getNewsList(data)
+          .then(data => {
+            this.totalNum = data.data.total
+            this.inputVal = ''
+            this.newsList.list = data.data.data.map(curr => {
+              return {
+                imgUrl: curr.first,
+                title: curr.title,
+                date: computeDate(curr.createtime)
+              }
+            })
+          })
+      },
+      // 资讯检索
+      searchKeyword(){
+        this.getNewsListFun({
+          name: this.inputVal,
+          size: this.pageSize,
+          page: this.currentPage,
+          hide: 1
+        })
       }
     },
     mounted() {
@@ -212,7 +244,13 @@
       new this.fM('.specialEffects','moveC')
     },
     created() {
-      //
+      this.getNewsListFun({
+        name: this.inputVal,
+        size: this.pageSize,
+        page: this.currentPage,
+        hide: 1
+      })
+
     }
   }
 </script>
@@ -220,6 +258,7 @@
 <style scoped lang="less">
   .wrapper {
     position: relative;
+
     .footer_ {
       position: absolute;
       bottom: 0px;
@@ -294,11 +333,13 @@
             ul {
               display: flex;
               flex-wrap: wrap;
-              justify-content: space-between;
+              /*justify-content: space-between;*/
+              justify-content: flex-start;
               li {
                 list-style: none;
-                /*margin-bottom: 40px;*/
                 margin-bottom: 20px;
+                margin-right: 0.8vw;
+                width: 24%;
                 .img {
                   position: relative;
                   width: 360px;
@@ -325,7 +366,7 @@
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
-                    transition: all 0.2s;
+                    transition: width 0.2s,height 0.2s;
                     .joinInImg {
                       width: 40px;
                       transition: all 0.2s;
@@ -358,6 +399,9 @@
                   line-height:28px;
                   margin-bottom: 5px;
                   cursor: pointer;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
                 }
                 .date {
                   font-size:12px;
@@ -384,11 +428,188 @@
         bottom: 0px;
       }
     }
+    /deep/.el-pagination__total {
+      /*position: absolute;*/
+      /*left: 62vw;*/
+    }
   }
-  /deep/.el-pagination__total {
-    position: absolute;
-    left: 62vw;
+  @media screen and (max-width: 1600px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .box {
+            width: 96vw;
+            .newsList {
+              ul {
+                li {
+                  width: 22vw;
+                  .img {
+                    margin-bottom: 8px;
+                    width: 100%;
+                    img.liImg {
+                      width: 100%;
+                      height: auto;
+                    }
+                    .occlude {
+                      width: 100%;
+                      height: auto;
+                    }
+                  }
+                  h6 {
+                    font-size: 16px;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
+    /deep/.el-pagination__total {
+      position: initial!important;
+    }
   }
+  @media screen and (max-width: 1400px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .box {
+            .newsList {
+              ul {
+                justify-content: space-around;
+                li {
+                  width: 46vw;
+                  height: auto;
+                  .img {
+                    float: left;
+                    width: 220px;
+                    height: 120px;
+                    margin-right: 12px;
+                    img.liImg {
+                      width: 100%;
+                      height: auto;
+                    }
+                    .occlude {
+                      height: auto;
+                    }
+                    &:hover {
+                      .liImg {
+                        top: -20px;
+                        left: -24px;
+                        width: 260px;
+                        height: 158px;
+                      }
+                      .occlude {
+                        z-index: 2 ;
+                        display: flex;
+                        top: -20px;
+                        left: -24px;
+                        width: 260px;
+                        height: 158px;
+                      }
+                    }
+                  }
+                  h6 {
+                    font-size: 16px;
+                    font-weight: 600;
+                  }
+
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 900px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .box {
+            .newsList {
+              ul {
+                li {
+                  h6 {
+                    font-size: 14px;
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 850px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .box {
+            .newsList {
+              ul {
+                li {
+                  width: 90vw;
+                  .img {
+                    width: 120px;
+                    height: 50px;
+                    &:hover {
+                      .liImg {
+                        top: initial;
+                        left: initial;
+                        width: 120px;
+                        height: 73.33px;
+                      }
+                      .occlude {
+                        z-index: 2 ;
+                        top: 0px;
+                        left: 0px;
+                        width: 120px;
+                        height: 73.33px;
+                        .joinInImg {
+                          width: 24px;
+                        }
+                      }
+                    }
+                  }
+                  h6 {
+                    font-size: 14px;
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 480px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .box {
+            .newsList {
+              margin-top: 8px;
+              ul {
+                li {
+                  h6 {
+                    font-weight: initial;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      /deep/.el-pagination__total {
+        display: none!important;
+      }
+    }
+  }
+
   /deep/.el-pager {
     li {
       min-width: 28px;

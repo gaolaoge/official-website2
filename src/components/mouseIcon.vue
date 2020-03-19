@@ -59,11 +59,11 @@
 
         window.addEventListener('resize', onResize, false)
 
-        let tween = TweenMax.to(circle, 0.25, {
-          radius: circle.radius * 3,
-          ease: Power1.easeInOut,
-          paused: true
-        })
+        // let tween = TweenMax.to(circle, 0.25, {
+        //   radius: circle.radius * 3,
+        //   ease: Power1.easeInOut,
+        //   paused: true
+        // })
 
       }
 

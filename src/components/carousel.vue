@@ -25,12 +25,13 @@
 </template>
 
 <script>
+  import '@/assets/font.css'
   export default {
     name: 'Carousel',
     data(){
       return {
-        largeTitleOne: '强势打造',
-        largeTitleTwo: '中国电影云平台',
+        largeTitleOne: '——中国电影云平台',
+        largeTitleTwo: '为艺术保驾护航',
         largeTitleThree: 'SENSE IS THE BEST!',
         miniDirection: 'SENSE is the best and strongest in this field',
         tit: 'THE COMPANY 2020',
@@ -47,6 +48,7 @@
     height: 100vh;
     width: 100vw;
     max-width: 1920px;
+    font-family: PingFang-SC-Semibold,PingFangSCRegular;
     .b {
       flex-grow: 0;
       position: relative;
@@ -78,7 +80,7 @@
       padding-left: 50px;
       .largeTit {
         font-size: 60px;
-        font-weight: 600;
+        font-weight: 500;
         color: rgba(51,51,51,1);
         line-height: 70px;
         text-stroke: 1px rgba(51,51,51,1);
@@ -156,6 +158,56 @@
         .dire,
         .tit {
           text-shadow: 0px 0px 4px rgba(256,256,256,0.9);
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 810px){
+    .wrapper {
+      display: block;
+
+      .b {
+        width: 100%;
+        height: auto;
+        margin-bottom: 22px;
+        .img {
+          left: 2%;
+          padding: 20px 0px;
+        }
+      }
+      .bb {
+        display: none;
+      }
+      .t {
+        position: absolute;
+        width: 80%;
+        .largeTit {
+          font-size: 40px;
+          line-height: 58px;
+        }
+        .dire {
+          margin-top: 26px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 720px) {
+    .wrapper {
+      .b {
+        margin-top: 10vh;
+      }
+    }
+  }
+  @media screen and (max-width: 510px) {
+    .wrapper {
+      .b {
+        margin-top: 18vh;
+        margin-bottom: 6vh;
+      }
+      .t {
+        .largeTit {
+          font-size: 28px;
+          line-height: 40px;
         }
       }
     }

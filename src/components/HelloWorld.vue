@@ -84,8 +84,8 @@
               </ul>
             </div>
           </div>
-          <div class="thiVideo" @click="playerVid">
-            <video src="@/assets/m.mp4"
+          <div class="thiVideo" @click="$store.commit('changeVideoM',true)">
+            <video src="@/assets/NationalFilmCloud.mp4"
                    class="mp4"
                    poster="@/assets/timg2.jpg"></video>
             <div class="playerBtn">
@@ -130,7 +130,7 @@
               <p class="dire">
                 {{ association.moreDire }}
               </p>
-              <div class="btn">
+              <div class="btn" @click="$router.push('/filmAndTelevisionAssociation')">
                 <div class="btn_"></div>
                 <div class="btnM"></div>
                 <div class="btnT">
@@ -166,22 +166,31 @@
                     :key="index"
                     :class="[{ 'outItem': infoMoveNum < -index || -index < infoMoveNum - 2}]">
                   <img :src="item.imgUrl" alt="" class="img">
-                  <h6 class="tit">
+                  <h6 class="tit" :title="item.title">
                     {{ item.title }}
                   </h6>
                   <p class="date">
                     {{ item.date }}
                   </p>
                   <div class="btn" @click="$store.commit('changeArticleM',true)">
-                    <img src="@/icons/+.png" alt="" class="addIcon">
-                    <div ref="btnn">
+                    <div class="f">
+                      <img src="@/icons/+.png" alt="" class="addIcon">
+                      <span>
                       {{ item.btnT }}
+                    </span>
                     </div>
+                    <div class="s">
+                      <img src="@/icons/+.png" alt="" class="addIcon">
+                      <span>
+                      {{ item.btnT }}
+                    </span>
+                    </div>
+
                   </div>
                 </li>
               </ul>
             </div>
-            <div class="btnGroup" @click="$router.push('/companyProfile')">
+            <div class="btnGroup" @click="$router.push('/industryInformation')">
               <img src="@/icons/+yellow.png" alt="">
               <span class="text">
                 <span class="f">
@@ -213,12 +222,24 @@
                 </div>
               </div>
               <div class="btnJoin">
-                <img src="@/icons/+yellow.png" alt="" class="i">
-                <div class="join">
-                  <div ref="btnnn" style="display: inline-block">
-                    {{ info.join }}
+                <div class="f">
+                  <img src="@/icons/+yellow.png" alt="" class="i">
+                  <div class="join">
+                    <div>
+                      {{ info.join }}
+                    </div>
                   </div>
                 </div>
+
+                <div class="s">
+                  <img src="@/icons/+yellow.png" alt="" class="i">
+                  <div class="join">
+                    <div>
+                      {{ info.join }}
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
             <div class="logoList" :class="[{'showEndSection': endSection}]">
@@ -229,67 +250,6 @@
         <footerM class="footer_" @changeS_="changeS"/>
       </div>
     </full-page>
-    <el-dialog :visible.sync="dialogFormVisible"
-               :before-close="closeVidBase"
-               top="40px"
-               destroy-on-close
-               width="1280px">
-      <video src="@/assets/m.mp4"
-             class="mp4"
-             poster="@/assets/timg2.jpg"
-             :muted="vidPlayer.mutedV"
-             @click="closeVid"
-             ref="vid"></video>
-      <!--继续播放-->
-      <div class="palyerBtnOtherBox" v-show="!playing">
-        <img src="@/icons/playerBtn.png"
-             alt=""
-             class="palyerBtnOther"
-             @click="playerVid">
-      </div>
-      <!--重新播放-->
-      <div class="againVidBtnBox" v-show="vidDone">
-        <img src="@/icons/svg/againVid.svg"
-             alt=""
-             class="againVidBtn"
-             @click="vidAgain">
-      </div>
-      <div class="controlsBase" ref="VideoBase">
-        <div class="controlsPlayBtn">
-          <img src="@/icons/svg/pause.svg"
-               alt=""
-               v-show="playing"
-               @click="closeVid">
-          <img src="@/icons/svg/play.svg"
-               alt=""
-               v-show="!playing"
-               @click="playerVid">>
-        </div>
-        <el-tooltip class="item"
-                    effect="dark"
-                    :content="time()"
-                    placement="top-end">
-          <div class="controlsEd" :style="[nowWF()]" />
-        </el-tooltip>
-        <!--音量-->
-        <div class="controlsVolumn">
-          <div class="helpDom"></div>
-          <div class="volumnConsole">
-            <div class="v"
-                 @click="changeVolumn($event)"
-                 :style="[volumnF()]"></div>
-          </div>
-          <img src="@/icons/svg/volumn.svg"
-               alt=""
-               @click="changeVolumn($event,'muted')"
-               v-show="!vidPlayer.mutedV">
-          <img src="@/icons/svg/muted.svg"
-               alt=""
-               @click="changeVolumn($event,'open')"
-               v-show="vidPlayer.mutedV">
-        </div>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -297,8 +257,14 @@
   import footerM from '@/components/footer/index'
   import carouselMoudle from '@/components/carousel'
   import { TweenLite,TimelineMax,Expo } from 'gsap'
-  import common from '@/assets/common.js'
   import '@/assets/common.css'
+  import { getNewsList } from '@/api/api.js'
+  import {
+    computeDate,
+    common
+  } from '@/assets/common.js'
+
+
   export default {
   name: 'home',
   data () {
@@ -361,34 +327,41 @@
             name: '云管理系统',
             r: 'Management System Cloud',
             t: [
-              `中宣部中国电影科学技术研究所作为中国电影行业唯一的国家级电影科研机构，
-                在新时代承载着以自主创新支撑中国电影高质量发展的使命和担当。
-                基于云计算平台提供数字电影分布式跨地域远程协同制作服务，
-                为国产精品电影持续有效推出创建协作机制和支撑平台。`,
-              `通过创建“强强联合、优势互补、协同创新”的电影制作新模式
-                 并为实现国际素材交换提供安全性和互操作保障。`
+              `国家电影云制作服务平台，
+               是基于云计算平台提供数字电影分布式跨地域远程协同制作服务，
+               为国产精品电影持续有效推出创建协作机制和支撑平台。
+               通过创建“强强联合、优势互补、协同创新”的电影制作新模式，
+               形成制作合力，
+               进而有效克服国内制作机构“小而散”发展瓶颈，
+               并为实现国际素材交换提供安全性和互操作保障。`,
+               `中宣部中国电影科学技术研究院作为中国电影行业唯一的国家级电影科研机构，
+               在新时代承载着以自主创新支撑中国电影高质量发展的使命和担当，
+               率先提出构建国家电影云制作服务平台。`
             ]
           },
           {
             name: '渲染农场',
             r: 'Management System Cloud',
             t: [
-              `中宣部中国电影科学技术研究所作为中国电影行业唯一的国家级电影科研机构，
-                在新时代承载着以自主创新支撑中国电影高质量发展的使命和担当。`,
-              `中国电影科研所率先提出构建国家电影云制作服务平台，
-                基于云计算平台提供数字电影分布式跨地域远程协同制作服务，
-                为国产精品电影持续有效推出创建协作机制和支撑平台。`
+              `公司通过高性能服务器集群的算力整合开发,
+               对复杂渲染任务实施分解和并行加速，
+               助力用户在有限时间内以可控成本实现影片视觉目标。`
             ]
           },
           {
             name: '云桌面',
             r: 'Management System Cloud',
             t: [
-              `为国产精品电影持续有效推出创建协作机制和支撑平台。`,
-              `通过创建“强强联合、优势互补、协同创新”的电影制作新模式，
-                 形成制作合力，
-                 进而有效克服国内制作机构“小而散”发展瓶颈，
-                 并为实现国际素材交换提供安全性和互操作保障。`
+              `云桌面，
+               基于分布式云计算存储技术，
+               集成互联网精华应用，
+               依托高度加密算法，
+               为互联网各个层次用户提供最简便、
+               最丰富、
+               最安全、
+               最贴心的服务。
+               使用户能够随时随地通过瘦终端访问高性能影视制作环境，
+               为用户创造简单易用的即时制作体验`
             ]
           }
         ],
@@ -402,49 +375,83 @@
         tit: '中国电影云基地',
         items: [
           {
-            title: '01 拥有最前沿技术',
-            content: `通过创建“强强联合、
-                      优势互补、
-                      协同创新”的电影制作新模式，
-                      形成制作合力，
-                      进而有效克服国内制作机构“小而散”发展瓶颈，
-                      并为实现国际素材交换提供安全性和互操作保障。`
+            title: '01 基地介绍',
+            content: `中国电影云基地是集中国电影云研发中心、
+                      互动空间、
+                      高科技体验馆、
+                      电影元素商业街区、
+                      电影上下游产业办公用房、
+                      众创空间、
+                      孵化器、
+                      邻里关系为一体的产业园区。
+                      基地位于青岛市即墨区龙山街道，
+                      紧邻创智新区政府、
+                      市民广场、
+                      音乐谷、
+                      龙泉公园、
+                      盟旺山公园等。
+                      总投资约35亿元，
+                      占地面积260亩，
+                      地上建筑面积约31.5万平方米，
+                      容积率2.5，
+                      现在开发建设阶段，
+                      预计2022年前完成。`
           },
           {
-            title: '02 丰富的政府补贴',
-            content: `通过创建“强强联合、
-                      优势互补、
-                      协同创新”的电影制作新模式，
-                      形成制作合力，
-                      进而有效克服国内制作机构“小而散”发展瓶颈，
-                      并为实现国际素材交换提供安全性和互操作保障。`
+            title: '02 政策支持',
+            content: `本园区项目为政府重点招商引进项目，
+                      入驻企业可享受税收优惠、
+                      房屋补贴、
+                      人才补贴等优惠政策；
+                      并且中国电影云平台落地商业区，
+                      将大大降低企业的使用成本、
+                      提高传输速度、
+                      技术团队支持随时完善客户需求。`
           },
           {
-            title: '03 全面的配套服务',
-            content: `通过创建“强强联合、
-                      优势互补、
-                      协同创新”的电影制作新模式，
-                      形成制作合力，
-                      进而有效克服国内制作机构“小而散”发展瓶颈，
-                      并为实现国际素材交换提供安全性和互操作保障。`
+            title: '03 园区配套设施',
+            content: `园区基础配套、
+                      生活配套、
+                      工商税务、
+                      法律财务、
+                      知识产权服务、
+                      人力资源服务、
+                      管理咨询服务、
+                      投融资服务等多种咨询辅导代办服务。`
           },
           {
-            title: '04 填补行业的空白',
-            content: `通过创建“强强联合、
-                      优势互补、
-                      协同创新”的电影制作新模式，
-                      形成制作合力，
-                      进而有效克服国内制作机构“小而散”发展瓶颈，
-                      并为实现国际素材交换提供安全性和互操作保障。`
+            title: '04 资源共享',
+            content: `打破现在行业“小而散”的特点，
+                      产业聚集，
+                      为上下游企业提供资源，
+                      资源不外流，
+                      形成产业化、
+                      规模化。
+                      通过通讯、
+                      网络等公共设施实现资源共享，
+                      资源互补，
+                      让资源得到最大效率的利用，
+                      使企业共同进步。`
           },
           {
-            title: '05 帮助成功转化降低成本',
-            content: `通过创建“强强联合、
-                      优势互补、
-                      协同创新”的电影制作新模式，
-                      形成制作合力，
-                      进而有效克服国内制作机构“小而散”发展瓶颈，
-                      并为实现国际素材交换提供安全性和互操作保障。`
+            title: '05 入驻扶持',
+            content: `特色增值服务体系，
+                      助力企业高速成长。
+                      聘请技术专家、
+                      教授、
+                      学术带头人为名誉顾问，
+                      对企业研发中心的困难进行点对点帮扶，
+                      定期举办园区企业技术、
+                      管理专题讲座和培训。
+                      随着城市经济的不断发展，
+                      园区发展需通过构建高效的组织架构、
+                      产业链条、
+                      服务集群，
+                      来提升园区的运营效率，
+                      从而增强园区的价值优势，
+                      打造及集政策优惠，
+                      产业聚集，
+                      人才聚集为一体的高端科技产业园区。`
           },
         ],
         activeNum: 0
@@ -455,9 +462,12 @@
         title3: 'US!',
         moreMiniTitle: 'MOVIE Association',
         moreTitle: `希望您了解 “影视协会”  并加入我们！`,
-        moreDire: `中国电影云平台是基于云计算服务平台的数字电影网络化分布式跨域协同制作，
-                   促进我国精品电影持续推出，
-                   有效提升我国电影制作水平和能力……`,
+        moreDire: `影视协会以“协作、创新、发展”为主要目标；
+                   以 “搭建平台、打造精品、提供服务、协作发展”为工作思路。
+                   打造专业化、
+                   规范化、
+                   国际化中国电影云平台，
+                   输出中国电影制作标准。`,
         moreBtn: '了解更多'
       },
       information: {
@@ -467,49 +477,31 @@
         itemList: [
           {
             imgUrl: require('@/assets/pic1.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
+            title: '疫情原因，春节档电影下架，影视行业该如何应对？',
             date: '2020 02/25 11:58',
             btnT: '详情'
           },
           {
             imgUrl: require('@/assets/pic2.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
+            title: '面对世界灾难，卡梅隆导演呼吁停止宰杀动物，以身作则，做一名素食主义者。',
             date: '2020 02/25 11:58',
             btnT: '详情'
           },
           {
             imgUrl: require('@/assets/pic3.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
+            title: '2020年，网络电影“新机遇”？（疫情期间，网络电影崭露锋芒）',
             date: '2020 02/25 11:58',
             btnT: '详情'
           },
           {
             imgUrl: require('@/assets/pic4.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
+            title: '预测：2020年度电影票房 冠军是特效影片。',
             date: '2020 02/25 11:58',
             btnT: '详情'
           },
           {
             imgUrl: require('@/assets/pic1.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
-            date: '2020 02/25 11:58',
-            btnT: '详情'
-          },
-          {
-            imgUrl: require('@/assets/pic2.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
-            date: '2020 02/25 11:58',
-            btnT: '详情'
-          },
-          {
-            imgUrl: require('@/assets/pic3.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
-            date: '2020 02/25 11:58',
-            btnT: '详情'
-          },
-          {
-            imgUrl: require('@/assets/pic4.png'),
-            title: '豆瓣8.9分的电影！动作戏不掺任何水分',
+            title: '《哪吒》成功的背后带给影视行业带来哪些启示？',
             date: '2020 02/25 11:58',
             btnT: '详情'
           }
@@ -526,21 +518,10 @@
       endSection: false,
       infoMoveNum: 0,
       fM: null,   //title波动
-      dialogFormVisible: false,
       form: {
         name: ''
       },
-      playing: false,
-      vidDone: false,
-      vidPlayer: {
-        rAF: null,                  //播放器setInterVal
-        nowW: 0,                    //当前进度条宽度
-        timeOut: 0,                 //当前播放秒数
-        vidSpeedS: 0,               //每秒速度
-        mutedV: false,              //静音
-        VolumnVNow: '100%',         //当前音量
-        VolumnVLast: '100%'         //上一次音量
-      },
+      // },
       footerInfo: false,
       firstBrowsing: {
         onePage: true,
@@ -619,84 +600,6 @@
           marginLeft: this.infoMoveNum * 420
         }
       },
-      nowWF(){
-        return {
-          width: this.vidPlayer.nowW + 'px'
-        }
-      },
-      volumnF(){
-        return {
-          background: 'repeating-linear-gradient(0deg , rgba(247,237,92,0.8),rgba(247,237,92,0.8) ' + this.vidPlayer.VolumnVNow + ', rgba(247, 244, 248, 0) ' + this.vidPlayer.VolumnVNow + ' , rgba(247, 244, 248, 0) 100%)'
-        }
-      },
-      time(){
-        let m = parseInt(parseInt(this.vidPlayer.timeOut) / 60) > 9 ? parseInt(parseInt(this.vidPlayer.timeOut) / 60) : '0' + parseInt(parseInt(this.vidPlayer.timeOut) / 60),
-          s = parseInt(this.vidPlayer.timeOut) % 60 > 9 ? parseInt(this.vidPlayer.timeOut) % 60 : '0' + parseInt(this.vidPlayer.timeOut) % 60
-        return m + ' : ' + s
-      },
-      //播放视频
-      playerVid(){
-        this.dialogFormVisible = true
-
-        setTimeout(() => {
-          this.$refs.vid.play()
-          this.playing = true
-          let n = this.$refs.vid.currentTime / this.$refs.vid.duration,
-            allTime = this.$refs.vid.duration,
-            totalW = parseInt(window.getComputedStyle(this.$refs.VideoBase).width) - 100
-          this.vidPlayer.vidSpeedS = totalW / allTime
-          this.vidPlayer.rAF = setInterval(() => {
-            this.vidPlayer.timeOut ++
-            this.vidPlayer.nowW = this.vidPlayer.timeOut * this.vidPlayer.vidSpeedS
-          },1000)
-          this.$refs.vid.addEventListener('ended',() => {
-            clearTimeout(this.vidPlayer.rAF)
-            this.vidDone = true
-          })
-        },100)
-
-      },
-      //暂停视频
-      closeVid(){
-        this.$refs.vid.pause()
-        this.playing = false
-        clearTimeout(this.vidPlayer.rAF)
-      },
-      //关闭视频
-      closeVidBase(done){
-        done()
-        this.closeVid()
-        this.vidPlayer.timeOut = 0
-        this.vidPlayer.nowW = 0
-        this.vidPlayer.mutedV = false
-      },
-      // 重播
-      vidAgain(){
-        this.vidDone = false
-        this.vidPlayer.timeOut = 0
-        this.vidPlayer.nowW = 0
-        this.$refs.vid.currentTime = 0
-        this.playerVid()
-      },
-      //调节音量
-      changeVolumn(event,val){
-        if(val){
-          switch(val){
-            case 'muted':
-              this.vidPlayer.VolumnVLast = this.vidPlayer.VolumnVNow
-              this.vidPlayer.mutedV = true
-              this.vidPlayer.VolumnVNow = '0%'
-              break
-            case 'open':
-              this.vidPlayer.mutedV = false
-              this.vidPlayer.VolumnVNow = this.vidPlayer.VolumnVLast
-          }
-          return false
-        }
-        this.vidPlayer.VolumnVLast = this.vidPlayer.VolumnVNow
-        this.vidPlayer.VolumnVNow = parseInt( (100 - event.offsetY) / 10 ) + 1 + '0%'
-        this.$refs.vid.volume = Number(this.vidPlayer.VolumnVNow == '100%' ? '1.0' : '0.' + this.vidPlayer.VolumnVNow[0])
-      },
       //开关footer
       changeS(e){
         this.footerInfo = e
@@ -754,7 +657,22 @@
       //挂载到vue上
   },
   created() {
-    //
+    getNewsList({
+      name: '',
+      size: 8,
+      page: 1,
+      hide: 1
+    })
+      .then(data => {
+        this.information.itemList = data.data.data.map(curr => {
+          return {
+            imgUrl: curr.first,
+            title: curr.title,
+            date: computeDate(curr.createtime),
+            btnT: '详情'
+          }
+        })
+      })
   }
 }
 </script>
@@ -775,6 +693,7 @@
         height: 100vh;
         width: 100vw;
         max-width: 1920px;
+        /*第二屏*/
         .c {
           height: 724px;
           width: 1420px;
@@ -828,7 +747,7 @@
             }
             .o {
               position: absolute;
-              top: 130px;
+              top: 110px;
               right: 612px;
               width: 18px;
             }
@@ -844,7 +763,7 @@
               right: 100px;
               bottom: 140px;
               width: 502px;
-              height: 300px;
+              height: 340px;
               font-size:16px;
               font-weight:400;
               color:rgba(102,102,102,1);
@@ -859,6 +778,7 @@
                   display: inline-block;
                   width: 502px;
                   margin-right: 20px;
+                  vertical-align: top;
                   p:nth-of-type(1) {
                     margin-bottom: 10px;
                   }
@@ -938,6 +858,7 @@
             }
           }
         }
+        /*第三屏*/
         .thiVideo {
           position: relative;
           width: 880px;
@@ -1017,11 +938,13 @@
             }
           }
         }
+        /*第四屏*/
         .mainBase {
           display: flex;
           justify-content: space-around;
           align-items: center;
-          width: 1518px;
+          max-width: 1518px;
+          width: 92vw;
           height: 100%;
           background: repeating-linear-gradient(90deg , rgba(247, 244, 248, 1),rgba(247, 244, 248, 1) 119px , rgba(247, 244, 248, 0) 0 , rgba(247, 244, 248, 0) 238px);
           .title {
@@ -1129,6 +1052,7 @@
             }
           }
         }
+        /*第五屏*/
         .adornmentRe {
           position: absolute;
           left: 0px;
@@ -1199,11 +1123,15 @@
                   height: 220px;
                 }
                 .tit {
+                  width: 360px;
                   margin-top: 20px;
                   font-size:18px;
                   font-weight:500;
                   color:rgba(51,51,51,1);
                   line-height:28px;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
                 }
                 .date {
                   margin-top: 5px;
@@ -1215,6 +1143,9 @@
                 .btn {
                   position: relative;
                   margin-top: 30px;
+                  height: 22px;
+                  width: 60px;
+                  overflow: hidden;
                   font-size:14px;
                   font-weight:500;
                   color:rgba(51,51,51,1);
@@ -1223,12 +1154,21 @@
                   &::after {
                     position: absolute;
                     left: 12px;
-                    bottom: -2px;
+                    bottom: 0px;
                     content: '';
                     display: inline-block;
                     width:28px;
                     height:2px;
                     background:rgba(51,51,51,1);
+                  }
+                  &:hover {
+                    .f {
+                      margin-top: 0px;
+                    }
+                  }
+                  .f {
+                    transition: all 0.2s;
+                    margin-top: -20px;
                   }
                   .addIcon {
                     width: 9px;
@@ -1245,10 +1185,9 @@
             }
           }
           .btnGroup {
-            position: relative;
-            display: inline-block;
-            left: 968px;
-            top: 100px;
+            position: absolute;
+            right: 168px;
+            bottom: 0px;
             cursor: pointer;
             img {
               width: 16px;
@@ -1278,6 +1217,7 @@
             }
           }
         }
+        /*第六屏*/
         .base {
           position: relative;
           display: flex;
@@ -1332,27 +1272,45 @@
               }
             }
             .btnJoin {
+              position: relative;
               margin-left: 40px;
               cursor: pointer;
-              .i {
-                width: 16px;
-              }
-              .join {
-                display: inline-block;
-                vertical-align: bottom;
-                position: relative;
-                font-size:24px;
-                font-weight:500;
-                color:rgba(247,237,92,1);
-                &::after {
-                  position: absolute;
-                  left: 0px;
-                  bottom: -4px;
-                  content: '';
+              height: 35px;
+              width: 120px;
+              overflow: hidden;
+              .f,
+              .s {
+                transition: all 0.2s;
+                .i {
+                  width: 16px;
+                }
+                .join {
                   display: inline-block;
-                  width:98px;
-                  height:3px;
-                  background:rgba(247,237,92,1);
+                  vertical-align: bottom;
+                  font-size:24px;
+                  font-weight:500;
+                  color:rgba(247,237,92,1);
+                }
+              }
+              .f {
+                margin-top: -31px;
+                .join {
+                  font-weight: 600;
+                }
+              }
+              &::after {
+                position: absolute;
+                left: 19px;
+                bottom: 0px;
+                content: '';
+                display: inline-block;
+                width:98px;
+                height:3px;
+                background:rgba(247,237,92,1);
+              }
+              &:hover {
+                .f {
+                  margin-top: 0px;
                 }
               }
             }
@@ -1460,138 +1418,427 @@
     font-weight: 600;
   }
 
-  /deep/.el-dialog {
-    background-color: rgba(0,0,0,0);
-    box-shadow: 0px 0px rgba(0,0,0,0);
-  }
-  /deep/.el-dialog__header {
-    display: none;
-  }
-  /deep/.el-dialog__body {
-    position: relative;
-    /*padding: 0px;*/
-    font-size: 0px;
-    height: 720px;
-    background-color: rgba(0,0,0,0);
-  }
-  .mp4 {
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-  }
-  .palyerBtnOtherBox,
-  .againVidBtnBox {
-    position: absolute;
-    top: 41px;
-    left: 20px;
-    width: calc(100% - 40px);
-    height: calc(100% - 82px);
-    background-color: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .palyerBtnOther,
-    .againVidBtn {
-      width: 120px;
-      cursor: pointer;
-    }
-  }
-  .controlsBase {
-    position: absolute;
-    z-index: 99;
-    bottom: 41px;
-    left: 20px;
-    width: calc(100% - 40px);
-    height: 40px;
-    background-color: rgba(247, 237, 92, 0.3);
-    .controlsPlayBtn,
-    .controlsVolumn {
-      position: relative;
-      float: left;
-      width: 50px;
-      height: 100%;
-      background-color: rgba(255,106,115,1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .helpDom {
-        position: absolute;
-        bottom: 36px;
-        background-color: rgba(0,0,0,0);
-        width: 30px;
-        height: 10px;
-        display: none;
-      }
-      .volumnConsole {
-        position: absolute;
-        bottom: 46px;
-        width: 30px;
-        height: 120px;
-        background-color: rgba(0,0,0,0.4);
-        cursor: pointer;
-        border-radius: 3px;
-        box-shadow: 0px 0px 4px 0px rgba(256,256,256,0.24);
-        display: none;
-        //音量
-        .v {
-          position: absolute;
-          top: 10px;
-          left: 11px;
-          z-index: 9;
-          width: 8px;
-          height: 100px;
-          border-radius: 3px;
-        }
-        &::after {
-          content: '';
-          position: absolute;
-          top: 10px;
-          left: 11px;
-          width: 8px;
-          height: 100px;
-          background-color: rgba(247,237,92,0.26);
-          border-radius: 4px;
-          box-shadow: 0px 0px 4px 0px rgba(256,256,256,0.34);
-        }
-      }
-      img {
-        width: 20px;
-        cursor: pointer;
-      }
-    }
-    .controlsVolumn {
-      float: right;
-      background-color: rgba(247,237,92,1);
-      &:hover {
-        .volumnConsole,
-        .helpDom {
-          display: block;
-        }
-      }
-    }
-    .controlsEd {
-      display: inline-block;
-      height: 100%;
-      max-width: calc(100% - 100px);
-      overflow: hidden;
-      /*width: 1px;*/
-      background-color: rgba(247,237,92,0.8);
-      font-size: 14px;
-    }
-  }
-
   /deep/.fp-tableCell {
     display: flex;
     justify-content: center;
   }
 
-  @media screen and (max-width: 1460px){
-    .sectionBase {
-      .c {
-        width: 94vw;
-        .picBase {
-          .as {
-            width: 50%;
+  @media screen and (max-width: 1460px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          /*第二屏*/
+          .c {
+            width: 96vw;
+            .picBase {
+              .as {
+                width: 50%;
+              }
+              .o {
+                top: 110px;
+                right: 47%;
+              }
+              .right_ {
+                right: 66px;
+              }
+              .textBord {
+                width: 38vw;
+                height: 340px;
+                right: 66px;
+                ul {
+                  width: 320%;
+                  li {
+                    width: 38vw;
+                  }
+                  &.farm {
+                    margin-left: -105%;
+                  }
+                  &.table {
+                    margin-left: -210%;
+                  }
+                }
+
+              }
+            }
+            .navList {
+              ul {
+                li {
+                  width: 23vw;
+                }
+              }
+
+            }
+          }
+          //第三屏
+          .thiItem {
+            padding-left: 10px;
+            .itemList {
+              margin: 28px 1vw 0px 3vw;
+            }
+          }
+          .thiVideo {
+            width: 60vw;
+            margin-right: 10px;
+          }
+          .carousel {
+            width: 80vw;
+          }
+          /*第六屏*/
+          .base {
+            width: 98vw;
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 998px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          /*第二屏*/
+          .c {
+            width: 98vw;
+            .picBase {
+              .as {
+                width: 44%;
+                .hair,
+                .pers {
+                  width: 74%;
+                }
+              }
+              .o {
+                right: 53%;
+              }
+              .right_ {
+                right: 74px;
+              }
+              .textBord {
+                width: 43vw;
+                height: 340px;
+                right: 74px;
+                ul {
+                  width: 320%;
+                  li {
+                    width: 43vw;
+                  }
+                  &.farm {
+                    margin-left: -105%;
+                  }
+                  &.table {
+                    margin-left: -210%;
+                  }
+                }
+
+              }
+            }
+          }
+          /*.第三屏*/
+          .thiItem {
+            .itemList {
+              width: 38vw;
+            }
+          }
+          .thiVideo {
+            width: auto;
+            flex-grow: 1;
+            margin-right: 0px;
+          }
+          /*第四屏*/
+          .mainBase {
+            .title {
+              margin-left: -6vw;
+            }
+          }
+          /*第六屏*/
+          .base {
+            .info {
+              position: relative;
+              left: 16px;
+            }
+            .l {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 866px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .mainBase {
+            .title {
+              margin-left: -10vw;
+              margin-top: -20vh;
+              /*overflow: initial;*/
+            }
+            .more {
+              margin-top: 30vh;
+            }
+          }
+        }
+
+
+      }
+    }
+  }
+  @media screen and (max-width: 810px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          /*第二屏*/
+          .c {
+            width: 98vw;
+            .picBase {
+              .as {
+                width: 34%;
+                .hair,
+                .pers {
+                  width: 100%;
+                }
+              }
+              .o {
+                right: 63%;
+                width: 14px;
+              }
+              .right_ {
+                right: 74px;
+                width: 40px;
+              }
+              .textBord {
+                width: 50vw;
+                height: 340px;
+                right: 74px;
+                ul {
+                  width: 320%;
+                  li {
+                    width: 50vw;
+                    p {
+                      font-size: 14px;
+                    }
+                  }
+                  &.farm {
+                    margin-left: -105%;
+                  }
+                  &.table {
+                    margin-left: -210%;
+                  }
+                }
+
+              }
+            }
+            .navList {
+              ul {
+                 li {
+                   width: 21vw;
+                   .i {
+                     width: 16px;
+                     vertical-align: middle;
+                     margin: 0px 4px;
+                   }
+                   span {
+                     font-size: 16px;
+                   }
+                 }
+              }
+            }
+          }
+          /*第三屏*/
+          .thiVideo {
+            height: 40vh;
+            margin: 10px;
+            flex-shrink: 0;
+          }
+          .thiItem {
+            max-height: 60vh;
+            width: calc(100vw - 16px);
+            h4 {
+              font-size: 24px;
+            }
+            .itemList {
+              width: 60vw;
+            }
+          }
+          /*第四屏*/
+          .title {
+            opacity: 0.6;
+          }
+          .more {
+            position: absolute;
+            z-index: 2;
+            width: 92vw!important;
+          }
+          /*第五屏*/
+          .carousel {
+            top: 18vh;
+            .title,
+            .roundItem {
+              margin-left: 20px;
+            }
+          }
+        }
+        &:nth-of-type(3) {
+          .sectionBase {
+            flex-direction: column-reverse;
+            overflow: hidden;
+          }
+
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          /*第二屏*/
+          .c {
+            height: auto;
+            .picBase {
+              height: 680px;
+              .as {
+                width: 100%;
+                height: 38%;
+                .hair,
+                .pers {
+                  width: 60%;
+                }
+              }
+              .o {
+                left: 1%;
+                top: 274px;
+                width: 14px;
+              }
+              .right_ {
+                right: 20px;
+                bottom: 20px;
+                width: 40px;
+              }
+              .textBord {
+                width: 100%;
+                padding: 18px 8px;
+                box-sizing: border-box;
+                height: auto;
+                right: 0px;
+                bottom: 12px;
+                ul {
+                  width: 320%;
+                  li {
+                    width: calc(33.3333% - 30px);
+                    p {
+                      font-size: 14px;
+                      line-height: 26px;
+                    }
+                    .r {
+                      margin-top: 12px;
+                    }
+                  }
+                }
+
+              }
+            }
+            .navList {
+              margin-top: 20px;
+              ul {
+                flex-wrap: wrap;
+                justify-content: space-around;
+                li {
+                  width: 38vw!important;
+                  height: 40px;
+                  line-height: 40px;
+                  margin-bottom: 10px;
+                  .i {
+                    width: 14px;
+                    vertical-align: middle;
+                    margin: 0px 4px;
+                  }
+                  span {
+                    font-size: 14px;
+                  }
+                  &:nth-last-of-type(1) {
+                    width: 100px;
+                  }
+                }
+              }
+            }
+          }
+          /*第三屏*/
+          .thiItem {
+            h4 {
+              width: 100vw;
+            }
+            .itemList {
+              width: 90vw;
+              ul {
+
+                li.active {
+                  .content {
+                    margin: 22px 0px;
+                  }
+                }
+              }
+            }
+
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 420px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          /*第二屏*/
+          .c {
+            .picBase {
+              .textBord {
+                p {
+                  font-size: 13px!important;
+                }
+              }
+            }
+          }
+          /*第三屏*/
+          .thiVideo {
+            height: 26vh;
+            flex-grow: 0;
+          }
+          .thiItem {
+            height: 70vh;
+            .itemList {
+              margin-top: 10px;
+              ul {
+                li {
+                  &.active {
+                    .title {
+                      font-size: 18px;
+                    }
+                    .content {
+                      margin: 8px 0px;
+                      line-height: 24px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          /*第四屏*/
+          .mainBase {
+            .more {
+              margin-top: 10vh;
+              .miniTie {
+                margin-bottom: 32px;
+              }
+              .moreTitle {
+                font-size: 30px;
+                width: 90vw;
+                line-height: 40px;
+              }
+              .dire {
+                margin-bottom: 32px;
+              }
+            }
           }
         }
       }

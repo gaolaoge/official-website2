@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper-footer">
     <div class="b" @click="changeShow">
       <img src="@/icons/showFooter.png"
            alt=""
@@ -141,11 +141,11 @@
           }
         ],
         info: {
-          company: '青岛盛世影云有限公司',
-          address: '地址：山东省青岛市即墨区经济开发区',
+          company: '名称：青岛盛世影云影视科技有限公司',
+          address: '地址：山东省青岛市即墨区龙山街道办事处龙山花园1680号',
           post: '邮编：266000',
           phone: '固定电话：0532-2615612',
-          telephone: '手机：187676883366',
+          telephone: '电话：187676883366',
           email: '邮箱：huahsak@163.com'
         }
       }
@@ -160,7 +160,7 @@
 </script>
 
 <style lang="less" scoped>
-  .wrapper {
+  .wrapper-footer {
     position: relative;
     z-index: 3;
     margin-bottom: 0px;
@@ -271,4 +271,74 @@
       }
     }
   }
+  @media screen and (max-width: 1300px) {
+    .wrapper-footer {
+      footer {
+        .s {
+          .info {
+            width: 22vw;
+          }
+        }
+
+      }
+    }
+  }
+  @media screen and (max-width: 998px) {
+    .wrapper-footer {
+      footer {
+        .s {
+          .routeList {
+            width: 60vw;
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 780px) {
+    .wrapper-footer {
+      footer {
+        .s {
+          align-items: center;
+          flex-direction: column;
+          overflow: hidden;
+          .routeList,
+          .info {
+            width: 94vw;
+            padding-top: 26px;
+          }
+          .routeList {
+            .t {
+              .title {
+                font-size: 13px;
+              }
+            }
+          }
+          &.active {
+            height: 400px;
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .wrapper-footer {
+      footer {
+        .s {
+          .routeList {
+            .t {
+              .title {
+                font-size: 12px;
+              }
+              ul {
+                li {
+                  font-size: 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 </style>

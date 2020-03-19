@@ -26,6 +26,17 @@
               </li>
             </ul>
           </div>
+          <div class="miniNav" :class="[{'black': inTheEnd}]">
+            <span class="toLeft" @click="move('toLeft')">
+              <img src="@/icons/path.png" alt="" :class="[{'done': navActive == 0}]">
+            </span>
+            {{ navActive + 1 }}
+            /
+            {{ navList.length }}
+            <span @click="move('toRight')">
+              <img src="@/icons/path.png" alt="" :class="[{'done': navActive == navList.length - 1}]">
+            </span>
+          </div>
           <div class="contentBase">
             <ul>
               <li v-show="navActive == 0">
@@ -66,7 +77,7 @@
                   </div>
                   <div class="con">
                     <p v-for="(item,index) in page.pageTwo.con" :key="index">
-                      {{ item }}
+                      <span v-html="item"></span>
                     </p>
                   </div>
                 </div>
@@ -118,7 +129,7 @@
                   </address>
                   <p class="mapEnter">
                     {{ page.pageThree.addressEnter }}
-                    <img src="" alt="">
+                    <img src="@/icons/joinIn-icon.png" alt="">
                   </p>
                 </article>
               </li>
@@ -134,6 +145,7 @@
 <script>
   import footerM from '@/components/footer/index'
   import carouselMoudle from '@/components/carousel'
+  import { mapState } from 'vuex'
   export default {
     name: 'companyProfile',
     data(){
@@ -171,8 +183,8 @@
         navActive: 0,
         page: {
           pageOne: {
-            largeTit: 'about sense',
-            miniTit: '关于影视协会',
+            largeTit: 'about company',
+            miniTit: '关于公司',
             labelOne: '中国电影云基地',
             labelTwo: '政府重点招商引进项目',
             con: [
@@ -198,19 +210,43 @@
             labelOne: '中国电影云基地',
             labelTwo: '政府重点招商引进项目',
             con: [
-              `中宣部中国电影科学技术研究所授权青岛已臻化境影视科技有限公司，
-               与青岛市即墨区人民政府联手打造的中国电影云基地，
-               位于青岛市即墨区龙山街道，
-               占地面积188亩，
-               总建筑面积31.5万㎡。`,
-              `打造集中国电影云平台研发中心、
-               互动空间、
-               高科技体验馆、
-               电影元素商业街区、
-               电影上下游产业办公用房、
-               众创空间、
-               孵化器、
-               邻里关系为一体的产业园区。`
+              `中国电影云平台是文化与科技完美融合的典型，
+               通过线上的技术创新与线下建设、
+               运营，
+               平台的开发、
+               运营经验数据将为制定中国的电影后期制作技术标准的提供有力支持。
+               通过创建“强强联合、优势互补、协同创新”的电影制作新模式，
+               形成制作合力，
+               进而有效克服国内制作机构“小而散”发展瓶颈，
+               并通过大数据的收集三年内实现中国电影后期制作标准化制定。
+               并为实现国际素材交换提供安全性和互操作保障。`,
+              `中国电影云基地以国家级文化和科技整合示范基地为目标，
+               承载着将中国电影云平台重大科技成果转化为现实生产力的重大使命。
+               在即墨区政府的大力支持下，
+               通过建立专项基金、
+               原创影视投入奖补、
+               院线扶持、
+               提供健全的办公和生活空间等举措，
+               聚集影视策划公司、
+               影视制作公司、
+               视效公司、
+               文化传播公司、
+               影视服务公司、
+               专业摄影棚制作公司以及金融、
+               法律、
+               专利等中介服务机构，
+               打通影视制作、
+               影视教学、
+               后期软件开发全产业链，
+               实现影视上下游产业的线下聚合，
+               在即墨地区催生出一批有较强实力、
+               竞争力、
+               影响力和自主创新能力的影视相关企业。
+               计划用两到三年的时间，
+               培育出一批包括独角兽企业、
+               瞪羚企业在内的大型文化、
+               科技企业和企业集团。
+               打造繁荣的影视产业生态。`
             ],
             imgUrl: require('@/assets/pic_.png')
           },
@@ -239,9 +275,22 @@
     methods: {
       afterLoad(anchorLink,index){
         this.pageNum = index.index
+      },
+      move(dir){
+        switch(dir) {
+          case 'toLeft':
+            if(this.navActive == 0) return false
+            this.navActive --
+            break
+          case 'toRight':
+            if(this.navActive == this.navList.length - 1) return false
+            this.navActive ++
+            break
+        }
       }
     },
     computed: {
+      ...mapState(['inTheEnd']),
       bgi(){
         if(this.navActive == 2 && this.pageNum == 1){
           this.$store.commit('changeInTheEnd', true)
@@ -334,9 +383,38 @@
             }
           }
         }
+        .miniNav {
+          position: absolute;
+          height: 40px;
+          right: 16vw;
+          top: 12vh;
+          align-items: center;
+          justify-content: space-between;
+          width: 110px;
+          display: none;
+          &.black {
+            color: #fff;
+          }
+          span {
+            vertical-align: middle;
+            img {
+              width: 28px;
+              cursor: pointer;
+              &.done {
+                opacity: 0.4;
+                cursor: initial;
+              }
+            }
+            &.toLeft {
+              img {
+                transform: rotate(180deg);
+              }
+            }
+          }
+        }
         .contentBase {
           width: 1040px;
-          height: 500px;
+          height: 78vh;
           ul {
             li {
               list-style: none;
@@ -425,7 +503,8 @@
                       position: absolute;
                       top: 34px;
                       left: 0px;
-
+                      z-index: 2;
+                      box-shadow: 0px 0px 4px 1px rgba(256,256,256,0.6);
                       &.m1 {
                         left: -26px;
                       }
@@ -452,14 +531,33 @@
                     line-height:22px;
                     letter-spacing:4px;
                     margin-bottom: 5px;
+                    display: inline-block;
+                    width: 100%;
                   }
                   p {
+                    position: relative;
+                    display: inline-block;
                     font-size:18px;
                     font-weight:400;
                     color:rgba(255,255,255,1);
                     line-height:25px;
                     letter-spacing:1px;
                     margin-bottom: 40px;
+                    &::after {
+                      content: '';
+                      position: absolute;
+                      left: 0px;
+                      bottom: -4px;
+                      height: 2px;
+                      width: 0px;
+                      background-color: rgba(256,256,256,1);
+                      transition: width 0.2s;
+                    }
+                    &:hover {
+                      &::after {
+                        width: 100%;
+                      }
+                    }
                   }
                 }
                 .t {
@@ -479,6 +577,11 @@
                     color:rgba(255,255,255,1);
                     line-height:32px;
                     letter-spacing:5px;
+                    img {
+                      width: 22px;
+                      cursor: pointer;
+                      vertical-align: middle;
+                    }
                   }
                 }
               }
@@ -492,6 +595,377 @@
       .footer_ {
         position: absolute;
         bottom: 0px;
+      }
+    }
+  }
+  @media screen and (max-width: 1400px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .contentBase {
+            width: 70vw!important;
+            ul {
+              li {
+                &:nth-of-type(1),
+                &:nth-of-type(2){
+                  .left {
+                    padding-right: 20px;
+                    .largeTit {
+                      font-size: 30px;
+                      margin-bottom: 4px;
+                    }
+                    .miniTit {
+                      font-size: 17px;
+                    }
+                    .label {
+                      font-size: 17px;
+                    }
+                    .con {
+                      font-size: 14px;
+                    }
+                  }
+                  .right {
+                    flex-basis: 40%;
+                  }
+                }
+                &:nth-of-type(3) {
+                  .f {
+                    width: 300px;
+                    .largeTit {
+                      font-size: 54px;
+                    }
+                  }
+                  .s {
+                    label {
+                      font-size: 15px;
+                    }
+                    p {
+                      font-size: 16px;
+                    }
+                  }
+                  .t {
+                    width: 285px;
+                    address {
+                      font-size: 18px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1230px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .joinUs {
+            .btn {
+              width: 120px;
+              height: 40px;
+              line-height: 40px;
+              font-size: 14px;
+            }
+          }
+          .navBase {
+            ul {
+              padding-left: 20px;
+              li {
+                font-size: 14px;
+              }
+            }
+          }
+          div.contentBase {
+            width: 70vw;
+            ul {
+              li {
+                &:nth-of-type(1),
+                &:nth-of-type(2) {
+                  .right {
+                    img.img {
+                      width: 34vw;
+                      height: auto;
+                    }
+                  }
+                }
+                &:nth-of-type(3) {
+                  .f {
+                    width: 260px;
+                    .largeTit {
+                      font-size: 40px;
+                    }
+                    .vx {
+                      margin-right: 20px;
+                    }
+                    .wb {
+                      margin: 0px;
+                    }
+                  }
+                  .s {
+                    label {
+                      font-size: 13px;
+                    }
+                    p {
+                      font-size: 14px;
+                    }
+                  }
+                  .t {
+                    width: 260px;
+                    address {
+                      font-size: 16px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 960px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .joinUs {
+            top: 80px;
+          }
+          div.contentBase {
+            width: 74vw;
+            height: 70vh;
+            ul {
+              li {
+                &:nth-of-type(1),
+                &:nth-of-type(2) {
+                  flex-wrap: wrap;
+                  flex-direction: column;
+                  .left {
+                    .miniTit {
+                      margin-bottom: 16px;
+                    }
+                    .label {
+                      margin-bottom: 16px;
+                    }
+                  }
+                  .right {
+                    img.img {
+                      width: auto;
+                      margin: 20px auto;
+                      display: block;
+                    }
+                  }
+                }
+                &:nth-of-type(3) {
+                  flex-wrap: wrap;
+                  justify-content: space-between;
+                  .f {
+                    width: 50%;
+                    .largeTit {
+                      font-size: 40px;
+                    }
+                    .vx {
+                      margin-right: 20px;
+                    }
+                    .wb {
+                      margin: 0px;
+                    }
+                  }
+                  .s {
+                    box-sizing: border-box;
+                    padding-left: 20px;
+                    width: 50%;
+                    label {
+                      font-size: 13px;
+                    }
+                    p {
+                      font-size: 14px;
+                    }
+                  }
+                  .t {
+                    margin-top: 40px;
+                    width: 100%;
+                    address {
+                      font-size: 16px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 826px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          div.contentBase {
+            width: 80vw;
+            margin-left: 60px;
+            ul {
+              li {
+                &:nth-of-type(1),
+                &:nth-of-type(2) {
+                  .left {
+                    .largeTit {
+                      font-size: 24px;
+                      line-height: 30px;
+                    }
+                    .miniTit {
+                      margin-bottom: 4px;
+                    }
+                    .label {
+                      margin-bottom: 4px;
+                    }
+
+                  }
+                }
+                &:nth-of-type(3) {
+                  flex-wrap: wrap;
+                  justify-content: space-between;
+                  .f {
+                    width: 100%;
+                    margin-bottom: 20px;
+                    .largeTit {
+                      font-size: 40px;
+                      margin-bottom: 0px;
+                    }
+                    .vx {
+                      margin-right: 20px;
+                    }
+                    .wb {
+                      margin: 0px;
+                    }
+                  }
+                  .s {
+                    width: 100%;
+                    padding-left: 0px;
+                    p {
+                      font-size: 14px;
+                      margin-bottom: 14px;
+                    }
+                  }
+                  .t {
+                    margin-top: 40px;
+                    width: 100%;
+                    address {
+                      font-size: 16px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .navBase {
+            ul {
+              padding-left: 8px;
+              li {
+                font-size: 14px;
+              }
+            }
+          }
+          div.contentBase {
+            width: 70vw;
+            margin-left: 42px;
+            ul {
+              li {
+                &:nth-of-type(1),
+                &:nth-of-type(2) {
+                  .left {
+                    width: 100%;
+                    .largeTit {
+                      font-size: 20px;
+                      line-height: 24px;
+                    }
+                    .label {
+                      padding: 4px 14px;
+                      line-height: 28px;
+                      font-size: 15px;
+                    }
+                    .con {
+                      font-size: 13px;
+                      line-height: 26px;
+                    }
+                  }
+                  .right {
+                    width: 100%;
+                    img.img {
+                      width: 100%;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 540px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .joinUs {
+            left: 10vw;
+          }
+          .navBase {
+            display: none;
+          }
+          .miniNav {
+            display: flex;
+          }
+          div.contentBase {
+            width: 82vw;
+            margin: 60px 0px 0px 0px;
+            ul {
+              li {
+                &:nth-of-type(1) {
+                  .left {
+                    .label {
+                      margin: 16px 0px;
+                    }
+                  }
+                }
+                &:nth-of-type(3) {
+                  flex-wrap: wrap;
+                  justify-content: space-between;
+                  .f {
+                    margin-bottom: 20px;
+                    .largeTit {
+                      font-size: 28px;
+                      line-height: 38px;
+                    }
+                  }
+                  .s {
+                    p {
+                      font-size: 14px;
+                      margin-bottom: 14px;
+                    }
+                  }
+                  .t {
+                    margin-top: 40px;
+                    width: 100%;
+                    address {
+                      font-size: 16px;
+                    }
+                  }
+                }
+              }
+            }
+
+          }
+        }
       }
     }
   }

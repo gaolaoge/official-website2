@@ -7,52 +7,52 @@
       <p class="dire">
         {{ dire }}
       </p>
-      <div class="fromItem">
-        <label for="name">
-          {{ label.name }}
-        </label>
-        <input type="text" id="name" v-model="from.name">
-      </div>
-      <div class="fromItem">
-        <label for="business">
-          {{ label.business }}
-        </label>
-        <input type="text" id="business" v-model="from.business">
-      </div>
-      <div class="fromItem">
-        <label for="contactPerson">
-          {{ label.contactPerson }}
-        </label>
-        <input type="text" id="contactPerson" v-model="from.contactPerson">
-      </div>
-      <div class="fromItem">
-        <label for="identity">
-          {{ label.identity }}
-        </label>
-        <input type="text" id="identity" v-model="from.identity">
-      </div>
-      <div class="fromItem">
-        <label for="phone">
-          {{ label.phone }}
-        </label>
-        <input type="text" id="phone" v-model="from.phone">
-      </div>
-      <div class="iconItem">
-        <div class="l">
-          <img src="@/icons/returnIcon.png" alt="" @click="$store.commit('changeJoinUsM',false)">
-          <span>
-            {{ btnIcons.return_ }}
-          </span>
+        <div class="fromItem">
+          <label for="name">
+            {{ label.name }}
+          </label>
+          <input type="text" id="name" v-model="from.name">
         </div>
-        <div class="r">
-          <img src="@/icons/returnIcon.png" alt="" @click="pushData">
-          <span>
-            {{ btnIcons.go }}
-          </span>
+        <div class="fromItem">
+          <label for="business">
+            {{ label.business }}
+          </label>
+          <input type="text" id="business" v-model="from.business">
         </div>
-      </div>
+        <div class="fromItem">
+          <label for="contactPerson">
+            {{ label.contactPerson }}
+          </label>
+          <input type="text" id="contactPerson" v-model="from.contactPerson">
+        </div>
+        <div class="fromItem">
+          <label for="identity">
+            {{ label.identity }}
+          </label>
+          <input type="text" id="identity" v-model="from.identity">
+        </div>
+        <div class="fromItem" prop="phoneNum">
+          <label for="phone">
+            {{ label.phone }}
+          </label>
+          <input type="text" id="phone" v-model="from.phone">
+        </div>
+        <div class="iconItem">
+          <div class="l">
+            <img src="@/icons/returnIcon.png" alt="" @click="$store.commit('changeJoinUsM',false)">
+            <span>
+              {{ btnIcons.return_ }}
+            </span>
+          </div>
+          <div class="r">
+            <img src="@/icons/returnIcon.png" alt="" @click="pushData">
+            <span>
+              {{ btnIcons.go }}
+            </span>
+          </div>
+        </div>
     </div>
-    <div class="shutWin" v-show="status == 'carryOut'">
+tem <div class="shutWin" v-show="status == 'carryOut'">
       <img src="@/icons/suc.png" alt="" class="s">
       <p class="prompt" v-html="promptTex"></p>
       <span class="t">
@@ -69,6 +69,8 @@
 
 <script>
   import bgi from '@/assets/formImg.png'
+  import { pushJoinUs } from '@/api/api.js'
+
   export default {
     name: 'joinUs',
     data(){
@@ -110,18 +112,76 @@
     },
     methods: {
       pushData(){
-        this.status = 'carryOut'
-        let t = setInterval(() => {
-          let n = parseInt(this.sec)
-          if(n == 0){
-            this.$store.commit('changeJoinUsM',false)
-            this.sec = 3
-            this.status = 'fillIn'
-            clearInterval(t)
-            return false
-          }
-          this.sec = --n + 's'
-        },1000)
+        if(!this.from.name){
+          this.$message({
+            message: '请正确填写公司名称',
+            type: 'error'
+          })
+          return false
+        }
+
+        if(!this.from.business){
+          this.$message({
+            message: '请正确填写公司主要业务',
+            type: 'error'
+          })
+          return false
+        }
+
+        if(!this.from.contactPerson || !this.from.identity){
+          this.$message({
+            message: '请明确联系人信息',
+            type: 'error'
+          })
+          return false
+        }
+
+        //验证电话号码
+        let phone = this.from.phone,
+            sDefault = /^1[3456789]\d{9}$/.test(phone),
+            gDefault = /^0\d{2,3}-?\d{7,8}$/.test(phone)
+        console.log(sDefault,gDefault)
+        if(!sDefault && !gDefault) {
+          this.$message({
+            message: '请填写正确手机号码',
+            type: 'error'
+          })
+          return false
+        }
+
+        //发送请求
+        pushJoinUs({
+          'comname': this.from.name,
+          'business': this.from.business,
+          'contacts': this.from.contactPerson,
+          'identity': this.from.identity,
+          'telephone': this.from.phone
+        })
+          .then(data => {
+            this.status = 'carryOut'
+
+            let t = setInterval(() => {
+              let n = parseInt(this.sec)
+              if(n == 0){
+                this.$store.commit('changeJoinUsM',false)
+                this.sec = 3
+                this.status = 'fillIn'
+                clearInterval(t)
+                return false
+              }
+              this.sec = --n + 's'
+            },1000)
+
+            this.from = {
+              name: '',
+              business: '',
+              contactPerson: '',
+              identity: '',
+              phone: ''
+            }
+          })
+
+
       }
     }
   }
@@ -235,5 +295,35 @@
     }
 
   }
-
+  @media screen and (max-width: 640px) {
+    .wrapper-joinUs {
+      .formM {
+        width: 90vw;
+        .tit {
+          margin-top: 100px;
+          font-size:30px;
+        }
+        .dire {
+          font-size:13px;
+        }
+        .fromItem,
+        .iconItem {
+          width: 90vw;
+          margin-top: 22px;
+          label {
+            font-size: 16px;
+          }
+          input {
+            width: calc(100% - 110px);
+          }
+          .l,
+          .r {
+            img {
+              width: 34px;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

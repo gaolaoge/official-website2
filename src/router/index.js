@@ -61,5 +61,13 @@ export default new Router({
       path: '/homeM',
       redirect: '/'
     },
+    {
+      path: '/movieCloudPlatformFir',
+      redirect: '/movieCloudPlatform'
+    },
+    {
+      path: '/movieCloudPlatformSec',
+      redirect: '/movieCloudPlatform'
+    },
   ]
 })

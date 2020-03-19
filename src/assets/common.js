@@ -1,4 +1,4 @@
-export default class {
+class common {
   constructor(dom) {
     this.dom = dom
     this.domText = dom.innerText
@@ -7,9 +7,9 @@ export default class {
   }
   addHelpDom(){
     let newDom = document.createElement("DIV"),
-        newTex = document.createTextNode(this.domText),
-        newFatherDom = document.createElement("DIV"),
-        oldFatherDom = this.dom.parentNode
+      newTex = document.createTextNode(this.domText),
+      newFatherDom = document.createElement("DIV"),
+      oldFatherDom = this.dom.parentNode
     newFatherDom.style.overflow = 'hidden'
     newFatherDom.style.display = 'inline-block'
     newFatherDom.style.width = '100px'
@@ -35,4 +35,28 @@ export default class {
       this.dom.classList.remove('active')
     })
   }
+}
+
+// 时间戳
+function computeDate(time) {
+  var date = new Date()
+  date.setTime(time)
+  var y = date.getFullYear(),
+      m = date.getMonth() + 1
+  m = m < 10 ? ('0' + m) : m
+  var d = date.getDate()
+  d = d < 10 ? ('0' + d) : d
+  var h = date.getHours()
+  h = h < 10 ? ('0' + h) : h
+  var minute = date.getMinutes(),
+    second = date.getSeconds()
+  minute = minute < 10 ? ('0' + minute) : minute
+  second = second < 10 ? ('0' + second) : second
+
+  return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+}
+
+export {
+  computeDate,
+  common
 }

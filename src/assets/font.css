@@ -11,3 +11,31 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "MicrosoftYaHei";
+  src: url('MicrosoftYaHei.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PingFang-SC-Semibold";
+  src: url('PingFang-SC-Semibold.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PingFangSCRegular";
+  src: url('PingFangSCRegular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Arial Bold";
+  src: url('ArialBold.ttf');
+  font-weight: normal;
+  font-style: normal;
+}

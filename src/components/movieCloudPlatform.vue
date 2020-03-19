@@ -2,14 +2,17 @@
   <div class="wrapper">
     <full-page :options="options">
       <div class="section active">
-        <div class="sectionBase">
-          <videoMoudle />
+        <div class="sectionBase fir">
+          <!--<videoMoudle />-->
+          <div class="videoBase">
+            <video src="@/assets/NationalFilmCloud.mp4" controls></video>
+          </div>
         </div>
       </div>
       <div class="section">
-        <div class="sectionBase">
+        <div class="sectionBase sec">
           <div class="img">
-            <img src="@/assets/computerPic.png" alt="">
+            <img src="@/assets/computerPic.png" alt="" ref="computerImg">
           </div>
           <div class="info">
             <h5 class="title">
@@ -55,7 +58,7 @@
               </li>
             </ul>
             <!--弹窗-->
-            <ul class="popUps" @click="popNum = null">
+            <ul class="popUps">
               <li class="lii one" v-show="popNum == 0">
                 <img src="@/assets/movieOne.png" alt="" class="bananaImg">
                 <ul class="k">
@@ -76,14 +79,15 @@
                 <p class="dir">
                   {{ itemOneMiniTit }}
                 </p>
-                <div class="a">
-                  <h6>
-                    {{ itemList[0]['indexNum'] }}
-                  </h6>
-                  <p class="title">
-                    {{ itemList[0]['title'] }}
-                  </p>
-                </div>
+                <!--<div class="a">-->
+                  <!--<h6>-->
+                    <!--{{ itemList[0]['indexNum'] }}-->
+                  <!--</h6>-->
+                  <!--<p class="title">-->
+                    <!--{{ itemList[0]['title'] }}-->
+                  <!--</p>-->
+                <!--</div>-->
+                <img src="@/icons/svg/shutIcon.svg" alt="" class="a" @click="popNum = null">
               </li>
               <li class="lii two" v-show="popNum == 1" >
                 <img src="@/assets/fg.png" alt="" class="bananaImg">
@@ -101,7 +105,8 @@
                     <img src="@/icons/btnOrange.png" alt="" @click.stop="switchItem('left')">
                     <span>
                       {{ itemTwo.itemNum }}
-                      / 4
+                      /
+                      {{ itemTwo.u.length }}
                     </span>
                     <img src="@/icons/btnOrange.png" alt="" @click.stop="switchItem('right')">
                   </div>
@@ -150,6 +155,7 @@
                     </li>
                   </ul>
                 </div>
+                <img src="@/icons/svg/shutIcon.svg" alt="" class="a" @click="popNum = null">
               </li>
             </ul>
           </div>
@@ -172,13 +178,15 @@
           scrollOverflow: true,
           scrollBar: false,
           scrollingSpeed: 500,
+          onLeave: this.onLeave,
+          afterLoad: this.afterLoad,
           recordHistory: false,
           menu: '#menu',
           // navigation: true,
           // navigationPosition: 'right',
           anchors: [
-            "/movieCloudPlatform",
-            "/movieCloudPlatform"
+            "/movieCloudPlatformFir",
+            "/movieCloudPlatformSec"
           ],
           animateAnchor: true,
           sectionsColor: [
@@ -231,22 +239,22 @@
         itemOne: [
           {
             imgUrl: require('@/icons/listOne.png'),
-            title: '远程协作',
-            dire: '采用云管理系统从未如此简单很好很简单'
+            title: '易操作',
+            dire: '将线下协同管理转化为简易软件操作'
           },
           {
             imgUrl: require('@/icons/listTwo.png'),
-            title: '远程协作',
-            dire: '采用云管理系统从未如此简单很好很简单'
+            title: '可视化',
+            dire: '制作进度、质量、 资产和人员以可视化方式高效呈现'
           },
           {
             imgUrl: require('@/icons/listThree.png'),
-            title: '远程协作',
-            dire: '采用云管理系统从未如此简单很好很简单'
+            title: '可管可控',
+            dire: '影视后期制作可见可管可控，提高工作透明度'
           },{
             imgUrl: require('@/icons/listFour.png'),
-            title: '远程协作',
-            dire: '采用云管理系统从未如此简单很好很简单'
+            title: '高效率',
+            dire: '软件操作效率高于以往复杂的跨地域协同制作管理'
           }
 
         ],
@@ -265,56 +273,69 @@
             {
               imgUrl: require('@/assets/user1.png'),
               name: 'user1',
-              cont: `速度更快性价比高；
-                     系统操作合理人性化；
-                     云储存；
-                     可同时兼容多个版本的系统软件，
-                     支持主流三维软件。`
+              cont: `高性能配置；高性能服务器集群，极速传输。`
             },
             {
               imgUrl: require('@/assets/user2.png'),
               name: 'user2',
-              cont: `实时浏览；
-                     系统稳定；
-                     数据安全；
-                     并且可以享受免费测试，
-                     确定项目使用时间；
-                     和一对一技术服务，
-                     第一时间解决问题。`
+              cont: `超高性价比；每日首图免费，会员充值双倍到账。`
             },
             {
               imgUrl: require('@/assets/user1.png'),
               name: 'user3',
-              cont: `速度更快性价比高；
-                     系统操作合理人性化；
-                     云储存；
-                     可同时兼容多个版本的系统软件，
-                     支持主流三维软件。`
+              cont: `数据高度安全；数据中心通过安全认证，拥有覆盖整个行业全球性内容安全保护计划。`
             },
             {
               imgUrl: require('@/assets/user2.png'),
               name: 'user4',
-              cont: `速度更快性价比高；
-                     系统操作合理人性化；
-                     云储存；
-                     可同时兼容多个版本的系统软件，
-                     支持主流三维软件。`
+              cont: `定制化服务；可针对客户单个项目做定制化插件服务。`
             },
+            {
+              imgUrl: require('@/assets/user1.png'),
+              name: 'user5',
+              cont: `兼容多版本；同时兼容多个版本的系统软件，支持主流三维软件。`
+            },
+            {
+              imgUrl: require('@/assets/user2.png'),
+              name: 'user6',
+              cont: `贴心的服务；享受免费测试；一对一技术服务，第一时间解决问题。`
+            }
           ],
           itemNum: 1  //轮播结构索引
-        }
+        },
+        computerImgMarginLeftV: 0
       }
     },
     components: {
       footerM,
       videoMoudle
     },
+    created(){
+      this.$store.commit('changeInTheEnd',true)
+    },
     methods: {
-      onLeave(){
+      onLeave(anchorLink,index){
+        if(index.anchor != '/movieCloudPlatformFir'){
+          this.$store.commit('changeInTheEnd',false)
 
+        }else{
+          this.$store.commit('changeInTheEnd',true)
+
+        }
       },
-      afterLoad(){
-
+      afterLoad(anchorLink,index){
+        if(index.anchor == '/movieCloudPlatformSec'){
+          if(!window.getComputedStyle){
+            return false
+          }
+          this.$refs.computerImg.style.marginLeft = this.computerImgMarginLeftV
+        }else{
+          if(!window.getComputedStyle){
+            return false
+          }
+          this.computerImgMarginLeftV = window.getComputedStyle(this.$refs.computerImg).marginLeft
+          this.$refs.computerImg.style.marginLeft = -100 + 'vw'
+        }
       },
       switchItem(dir){
         switch(dir){
@@ -336,13 +357,30 @@
   .wrapper {
     .section {
       .sectionBase {
+        height: 100vh;
         box-sizing: border-box;
-        padding-top: 120px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        overflow: hidden;
+        .videoBase {
+          height: 100%;
+          width: 100%;
+          overflow: hidden;
+          background-color: black;
+          video {
+            width: 100%;
+            height: 100%;
+          }
+        }
         .img {
-          width: 50%;
+          width: 50vw;
+          margin: auto 0px;
+          img {
+            margin-left: 0px;
+            transition: all 0.5s ease-out;
+            width: 50vw;
+          }
         }
         .info {
           width: 50%;
@@ -455,16 +493,18 @@
             display: flex;
             justify-content: center;
             z-index: 11;
-            background-color: rgba(255,255,255,0.9);
+            background-color: rgba(255,255,255,1);
             .lii {
               list-style: none;
               position: relative;
-              top: 100px;
+              padding-top: 100px;
               width: 1920px;
               height: 100vh;
               &.one {
                 .bananaImg {
                   position: absolute;
+                  left: 50%;
+                  transform: translateX(-50%);
                 }
                 .k {
                   position: relative;
@@ -517,52 +557,63 @@
                   line-height:25px;
                   text-align: center;
                 }
+                /*.a {*/
+                  /*position: relative;*/
+                  /*top: 44vh;*/
+                  /*!*bottom: 0px;*!*/
+                  /*margin: 0px auto;*/
+                  /*width: 200px;*/
+                  /*text-align: center;*/
+                  /*cursor: pointer;*/
+                  /*display: flex;*/
+                  /*flex-direction: column;*/
+                  /*justify-content: center;*/
+                  /*color:rgba(51,51,51,1);*/
+                  /*transition: all 0.2s;*/
+                  /*h6 {*/
+                    /*position: relative;*/
+                    /*font-size:60px;*/
+                    /*font-family:TypelaboNStd;*/
+                    /*font-weight:400;*/
+                    /*line-height:1.6em;*/
+                    /*transform: rotateY(0deg);*/
+                    /*transition: all 1.0s;*/
+                    /*&::after {*/
+                      /*content: '';*/
+                      /*width: 200px;*/
+                      /*height: 1px;*/
+                      /*background-color: rgba(51, 51, 51, 1);*/
+                      /*position: absolute;*/
+                      /*top: 52px;*/
+                      /*left: 0px;*/
+                    /*}*/
+                  /*}*/
+                  /*.title {*/
+                    /*font-size:18px;*/
+                    /*line-height:25px;*/
+                  /*}*/
+                  /*&:hover {*/
+                    /*h6 {*/
+                      /*transform: rotateY(360deg);*/
+                    /*}*/
+                  /*}*/
+                /*}*/
                 .a {
                   position: relative;
-                  top: 44vh;
-                  /*bottom: 0px;*/
-                  margin: 0px auto;
-                  width: 200px;
-                  text-align: center;
+                  left: 50%;
+                  top: 46vh;
+                  transform: translateX(-50%);
+                  z-index: 2;
+                  width: 44px;
                   cursor: pointer;
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  color:rgba(51,51,51,1);
-                  transition: all 0.2s;
-                  h6 {
-                    position: relative;
-                    font-size:60px;
-                    font-family:TypelaboNStd;
-                    font-weight:400;
-                    line-height:1.6em;
-                    transform: rotateY(0deg);
-                    transition: all 1.0s;
-                    &::after {
-                      content: '';
-                      width: 200px;
-                      height: 1px;
-                      background-color: rgba(51, 51, 51, 1);
-                      position: absolute;
-                      top: 52px;
-                      left: 0px;
-                    }
-                  }
-                  .title {
-                    font-size:18px;
-                    line-height:25px;
-                  }
-                  &:hover {
-                    h6 {
-                      transform: rotateY(360deg);
-                    }
-                  }
                 }
               }
               &.two {
                 .bananaImg {
                   position: absolute;
                   width: 1920px;
+                  left: 50%;
+                  transform: translateX(-50%);
                 }
                 .info2 {
                   position: absolute;
@@ -605,6 +656,7 @@
                     }
                     span {
                       display: inline-block;
+                      line-height: 30px;
                       vertical-align: top;
                       font-weight:600;
                       color:rgba(255,255,255,1);
@@ -645,7 +697,7 @@
                   top: 160px;
                   left: 683px;
                   ul {
-                    width: 2500px;
+                    width: 3500px;
                     li {
                       position: relative;
                       display: inline-block;
@@ -698,16 +750,30 @@
                     }
                   }
                 }
+                .a {
+                   position: relative;
+                   left: 50%;
+                   top: 76vh;
+                   transform: translateX(-50%);
+                   z-index: 2;
+                   width: 44px;
+                   cursor: pointer;
+                 }
               }
             }
           }
+        }
+        &.fir {
+          align-items: center;
+        }
+        &.sec {
+          padding-top: 120px;
         }
       }
       .footer_ {
         position: absolute;
         bottom: 0px;
       }
-
       .btn {
         position: relative;
         margin-top: 29px;
@@ -758,6 +824,352 @@
           .btnT {
             top: 10px;
             left: 10px;
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1480px) {
+    .wrapper {
+      .section {
+        .sectionBase.sec {
+          padding-top: 90px;
+          .info {
+            padding-right: 40px;
+            .title {
+              font-size: 32px;
+              margin-top: 0px;
+            }
+            .cont {
+              font-size: 15px;
+              line-height: 28px;
+            }
+          }
+          .itemList {
+            .popUps {
+              .lii {
+                &.one {
+                  .bananaImg {
+                    width: 1500px;
+                  }
+                  .a {
+                    top: 300px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 998px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          &.sec {
+            .img {
+              margin-left: -20vw;
+              img {
+                width: 60vw;
+                margin-left: -10vw;
+              }
+            }
+            .info {
+              width: 60vw;
+              .cont {
+                .con {
+                  font-size: 14px;
+                }
+              }
+              .addPerson {
+                margin-top: 20px;
+              }
+            }
+          }
+          .itemList {
+            .popUps {
+              .lii {
+                &.one {
+                  .k {
+                    width: 94vw;
+                  }
+                }
+                &.two {
+                  .info2 {
+                    left: 10vw;
+                  }
+                  .voice {
+                    left: 50vw;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
+  }
+  @media screen and (max-width: 840px) {
+    .wrapper {
+      .section {
+        .sectionBase.sec {
+          .img {
+            margin-left: -30vw;
+            img {
+              width: 70vw;
+              margin-left: -20vw;
+            }
+          }
+          .info {
+            padding-right: 40px;
+            width: 70vw;
+            .cont {
+              .con {
+                font-size: 13px;
+              }
+            }
+          }
+          .itemList {
+            .l {
+              .item {
+                width: 140px;
+                h6::after {
+                  width: 100%;
+                }
+                .title {
+                  font-size: 16px;
+                }
+              }
+
+            }
+            .popUps {
+              .lii {
+                &.two {
+                  .info2 {
+                    top: 160px;
+                    left: 5vw;
+                    .miniTit {
+                      font-size: 18px;
+                      margin-bottom: 4px;
+                    }
+                    .largeTit {
+                      font-size: 28px;
+                    }
+                    .cont {
+                      font-size: 14px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 670px) {
+    .wrapper {
+      .section {
+        .sectionBase.sec {
+          .info {
+            padding-right: 40px;
+            width: 70vw;
+            .title {
+              font-size: 26px;
+              line-height: 50px;
+            }
+            .addPerson {
+              .addMoreText {
+                font-size: 12px;
+                line-height: 34px;
+              }
+              .addMoreBtn {
+                width: 34px;
+              }
+              ul {
+                li {
+                  img {
+                    width: 34px;
+                  }
+                }
+              }
+            }
+            .cont {
+              .con {
+                font-size: 12px;
+              }
+            }
+          }
+          .itemList {
+            height: calc(100vh - 740px);
+            .popUps {
+              .lii {
+                &.one {
+                  .k {
+                    flex-wrap: wrap;
+                    li {
+                      flex-basis: 50%;
+                      padding: 0px 4px;
+                      box-sizing: border-box;
+                    }
+                  }
+                  .largeTit {
+                    top: 40px;
+                    font-size: 32px;
+                  }
+                  .dir {
+                    top: 60px;
+                  }
+                  .a {
+                    top: 140px;
+                  }
+                }
+                &.two {
+                  .info2 {
+                    top: 120px;
+                    left: 5vw;
+                    width: 90vw;
+                    .miniTit {
+                      font-size: 16px;
+                      margin-bottom: 0px;
+                    }
+                    .largeTit {
+                      font-size: 24px;
+                      margin-bottom: 0px;
+                    }
+                    .cont {
+                      font-size: 14px;
+                      margin-bottom: 20px;
+                    }
+                    .switchItem {
+                      margin-bottom: 30px;
+                    }
+                    .new {
+                      font-size: 14px;
+                    }
+                  }
+                  .voice {
+                    top: 460px;
+                    left: 5vw;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 530px) {
+    .wrapper {
+      .section {
+        .sectionBase.sec {
+          .img {
+            position: relative;
+            width: 100vw;
+            height: 100px;
+            margin-left: 0px;
+            img {
+              position: absolute;
+              bottom: 0px;
+              margin-left: 0px;
+            }
+          }
+          .info {
+            width: 100vw;
+            .title {
+              font-size: 24px;
+            }
+          }
+          .itemList {
+            margin-top: -50px;
+            .l {
+              .item {
+                width: 120px;
+                h6 {
+                  font-size: 40px;
+                  &::after {
+                    top: 34px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 420px) {
+    .wrapper {
+      .section {
+        .sectionBase.sec {
+          .img {
+            height: 20px;
+          }
+          .itemList {
+            margin-top: -40px;
+            .l {
+              .item {
+                width: 100px;
+                h6 {
+                  font-size: 30px;
+                  &::after {
+                    top: 24px;
+                  }
+                }
+                .title {
+                  font-size: 14px;
+                }
+              }
+            }
+            .popUps {
+              .lii {
+                &.one {
+                  .largeTit {
+                    top: 48px;
+                    font-size: 22px;
+                    .bv {
+                      width: 22px;
+                    }
+                  }
+                  .dir {
+                    top: 40px;
+                    font-size: 14px;
+                  }
+                }
+                &.two {
+                  .info2 {
+                    top: 120px;
+                    left: 5vw;
+                    width: 90vw;
+                    .miniTit {
+                      font-size: 16px;
+                      margin-bottom: 0px;
+                    }
+                    .largeTit {
+                      font-size: 24px;
+                      margin-bottom: 0px;
+                    }
+                    .cont {
+                      font-size: 14px;
+                      margin-bottom: 20px;
+                    }
+                    .switchItem {
+                      margin-bottom: 30px;
+                    }
+                    .new {
+                      font-size: 14px;
+                    }
+                  }
+                  .voice {
+                    top: 460px;
+                    left: 5vw;
+                  }
+                }
+              }
+            }
           }
         }
       }

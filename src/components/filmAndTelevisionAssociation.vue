@@ -3,11 +3,6 @@
     <full-page :options="options">
       <div class="section active">
         <div class="sectionBase">
-          <videoMoudle />
-        </div>
-      </div>
-      <div class="section">
-        <div class="sectionBase">
           <div class="joinUs" @click="$store.commit('changeJoinUsM',true)">
             <div class="btn">
               {{ btn }}
@@ -24,6 +19,17 @@
                 </span>
               </li>
             </ul>
+          </div>
+          <div class="miniNav">
+            <span class="toLeft" @click="move('toLeft')">
+              <img src="@/icons/path.png" alt="" :class="[{'done': navActive == 0}]">
+            </span>
+            {{ navActive + 1 }}
+            /
+            {{ navList.length }}
+            <span @click="move('toRight')">
+              <img src="@/icons/path.png" alt="" :class="[{'done': navActive == navList.length - 1}]">
+            </span>
           </div>
           <div class="contentBase">
             <ul>
@@ -119,7 +125,6 @@
 </template>
 
 <script>
-  import videoMoudle from '@/components/videoSection'
   import footerM from '@/components/footer/index'
   export default {
     name: 'filmAndTelevisionAssociation',
@@ -156,22 +161,15 @@
           pageOne: {
             largeTit: 'Introduction',
             miniTit: '关于影视协会',
-            labelOne: '中国电影云基地',
-            labelTwo: '政府重点招商引进项目',
+            labelOne: '关于影视协会',
+            labelTwo: '影视协会简介',
             con: [
-              `中宣部中国电影科学技术研究所授权青岛已臻化境影视科技有限公司，
-               与青岛市即墨区人民政府联手打造的中国电影云基地，
-               位于青岛市即墨区龙山街道，
-               占地面积188亩，
-               总建筑面积31.5万㎡。`,
-              `打造集中国电影云平台研发中心、
-               互动空间、
-               高科技体验馆、
-               电影元素商业街区、
-               电影上下游产业办公用房、
-               众创空间、
-               孵化器、
-               邻里关系为一体的产业园区。`
+              `影视协会以“协作、创新、发展”为主要目标；
+               以 “搭建平台、打造精品、提供服务、协作发展”为工作思路。
+               打造专业化、
+               规范化、
+               国际化中国电影云平台，
+               输出中国电影制作标准。`
             ],
             imgUrl: require('@/assets/pic_.png')
           },
@@ -213,8 +211,7 @@
       }
     },
     components: {
-      footerM,
-      videoMoudle
+      footerM
     },
     methods: {
       sliderItem(dire){
@@ -226,6 +223,18 @@
           case 'right':
             if(this.page.pageTwo.index_ == this.page.pageTwo.users.length) return false
             this.page.pageTwo.index_ ++
+            break
+        }
+      },
+      move(dir){
+        switch(dir) {
+          case 'toLeft':
+            if(this.navActive == 0) return false
+            this.navActive --
+            break
+          case 'toRight':
+            if(this.navActive == this.navList.length - 1) return false
+            this.navActive ++
             break
         }
       }
@@ -305,6 +314,32 @@
                 &:nth-of-type(2)::after {
                   width: 152px;
                 }
+              }
+            }
+          }
+        }
+        .miniNav {
+          position: absolute;
+          height: 40px;
+          right: 10vw;
+          top: 10vh;
+          align-items: center;
+          justify-content: space-between;
+          width: 110px;
+          display: none;
+          span {
+            vertical-align: middle;
+            img {
+              width: 28px;
+              cursor: pointer;
+              &.done {
+                opacity: 0.4;
+                cursor: initial;
+              }
+            }
+            &.toLeft {
+              img {
+                transform: rotate(180deg);
               }
             }
           }
@@ -462,6 +497,315 @@
       .footer_ {
         position: absolute;
         bottom: 0px;
+      }
+    }
+  }
+  @media screen and (max-width: 1400px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          div.contentBase {
+            width: 70vw;
+            ul {
+              li {
+                &:nth-of-type(1) {
+                  .left {
+                    padding-right: 20px;
+                    .largeTit {
+                      font-size: 30px;
+                      margin-bottom: 4px;
+                    }
+                    .miniTit {
+                      font-size: 17px;
+                    }
+                    .label {
+                      font-size: 17px;
+                    }
+                    .con {
+                      font-size: 14px;
+                    }
+                  }
+                }
+                &:nth-of-type(2) {
+                  .right {
+                    /*margin-left: 40px;*/
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1230px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .joinUs {
+            .btn {
+              width: 120px;
+              height: 40px;
+              line-height: 40px;
+              font-size: 14px;
+            }
+          }
+          .navBase {
+            ul {
+              padding-left: 20px;
+              li {
+                font-size: 14px;
+              }
+            }
+          }
+          div.contentBase {
+            width: 70vw;
+            ul {
+              li {
+                &:nth-of-type(1)  {
+                  .right {
+                    img.img {
+                      width: 34vw;
+                      height: auto;
+                    }
+                  }
+                }
+                &:nth-of-type(2) {
+                  .right {
+                    .label {
+                      margin-top: 140px;
+                    }
+                    .advantage {
+                      width: 34vw;
+                      ul {
+                        width: 550%;
+                        li {
+                          h5.largeTit {
+                          }
+                          .con {
+                            width: 34vw;
+                          }
+                        }
+                      }
+                      .btnGroup {
+                        bottom: -40px;
+                      }
+                    }
+                  }
+                  .left {
+                    .img {
+                      width: 28vw;
+                      padding-right: 20px;
+                      height: auto;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 960px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .joinUs {
+            top: 80px;
+          }
+          div.contentBase {
+            width: 74vw;
+            height: 70vh;
+            ul {
+              li {
+                &:nth-of-type(1)  {
+                  flex-wrap: wrap;
+                  flex-direction: column;
+                  .left {
+                    .miniTit {
+                      margin-bottom: 16px;
+                    }
+                    .label {
+                      margin-bottom: 16px;
+                    }
+                  }
+                  .right {
+                    img.img {
+                      width: auto;
+                      margin: 20px auto;
+                      display: block;
+                    }
+                  }
+                }
+                &:nth-of-type(2) {
+                  .right {
+                    margin-left: 0px;
+                    .advantage {
+
+                    }
+                  }
+                  .left {
+                    .img {
+                      width: 35vw;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 826px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          div.contentBase {
+            width: 80vw;
+            margin-left: 60px;
+            ul {
+              li {
+                &:nth-of-type(1)  {
+                  .left {
+                    .largeTit {
+                      font-size: 24px;
+                      line-height: 30px;
+                    }
+                    .miniTit {
+                      margin-bottom: 4px;
+                    }
+                    .label {
+                      margin-bottom: 4px;
+                    }
+
+                  }
+                }
+                &:nth-of-type(2) {
+                  flex-direction: column;
+                  padding: 0px 24px;
+                  box-sizing: border-box;
+                  .right {
+                    width: 100%;
+                    .label {
+                      margin-top: 20px;
+                    }
+                    .btnGroup {
+                      margin-top: 0px;
+                      .toLeft,
+                      .toRight {
+                        img {
+                          width: 34px;
+                        }
+                      }
+                    }
+                  }
+                  .left {
+                    margin-top: 20px;
+                    width: 100%;
+                    .miniTit {
+                      margin-bottom: 20px;
+                    }
+                    .largeTit {
+                      font-size: 24px;
+                      margin-bottom: 0px;
+                    }
+                    .img {
+                      display: block;
+                      margin: 0px auto;
+                      width: 30vw;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .navBase {
+            ul {
+              padding-left: 8px;
+              li {
+                font-size: 14px;
+              }
+            }
+          }
+          div.contentBase {
+            width: 70vw;
+            margin-left: 42px;
+            ul {
+              li {
+                &:nth-of-type(1)  {
+                  .left {
+                    width: 100%;
+                    .largeTit {
+                      font-size: 20px;
+                      line-height: 24px;
+                    }
+                    .label {
+                      padding: 4px 14px;
+                      line-height: 28px;
+                      font-size: 15px;
+                    }
+                    .con {
+                      font-size: 13px;
+                      line-height: 26px;
+                    }
+                  }
+                  .right {
+                    width: 100%;
+                    img.img {
+                      width: 100%;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 540px) {
+    .wrapper {
+      .section {
+        .sectionBase {
+          .joinUs {
+            left: 10vw;
+          }
+          .navBase {
+            display: none;
+          }
+          .miniNav {
+            display: flex;
+
+
+          }
+          div.contentBase {
+            width: 82vw;
+            margin: 60px 0px 0px 0px;
+            ul {
+              li {
+                &:nth-of-type(1) {
+                  .left {
+                    .label {
+                      margin: 16px 0px;
+                    }
+                  }
+                }
+
+              }
+            }
+
+          }
+        }
       }
     }
   }
